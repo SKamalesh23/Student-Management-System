@@ -1,0 +1,62 @@
+
+@property --myColor {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #264653;
+}
+
+thead{
+    text-align: center;
+    background-color: var(#fff);
+    color: #525252;
+}
+th{
+    font-size: 14px;
+    font-weight: 700 !important;
+    padding: 1.2rem !important;
+}
+tbody{
+    border-top:0.3px solid #fff !important ;
+}
+
+.table-container{
+    border-top: 0.05px solid rgba(0, 0, 0, 0.1);
+    max-width: 98vw;
+    display: flex;
+    justify-content: center;
+    /* margin-left: 2%; */
+}
+#table_wrapper{
+    width: 100%;
+    margin-left: 20px;
+}
+
+.table-container table tbody tr td{
+    text-align: center;
+    font-weight: 200;
+    font-size: 14px;
+    padding: 1.3rem;
+}
+.inter-table {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 100;
+  font-style: normal;
+}
+.dt-type-numeric{
+    text-align: center;
+}
+#teachers_table thead th{
+    background-color: var(--myColor);
+}
+.dt-header{
+    padding: 1rem;
+}
+.page-link{
+    color: var(--myColor) !important;
+}
+.page-item.active .page-link  {
+      background-color: var(--myColor) !important;
+      border-color: var(--myColor) !important;
+      color: #fff !important;
+}

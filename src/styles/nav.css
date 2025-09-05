@@ -1,0 +1,101 @@
+/* When sidebar is hovered, expand it */
+*{
+  padding: 0;
+  margin: 0;
+}
+nav{
+  position: fixed;
+  width:50px;
+  transition: width 0.35s ease;
+  border-radius: 50%;
+}
+.left{
+  padding: 4px !important;
+}
+.modal-title{
+  color: #1E2A38;
+  font-weight: 700;
+}
+nav:hover {
+  width: 220px !important;
+}
+main{
+  margin-left: 50px;
+}
+nav:hover ~ main{
+  margin-left: 220px;
+  transition: margin-left 0.35s ease;
+
+}
+.nav-item:hover .active-nav{
+  color: #1E2A38 !important;
+}
+/* Expand brand inside */
+nav:hover .nav-brand {
+  display: block;
+}
+.nav:hover .i{
+  display: none;
+}
+nav:hover .nav-link .span {
+display: inline;
+  max-width: 200px; /* big enough for text */
+}
+
+.titillium-web-semibold {
+        font-family: "Titillium Web", sans-serif;
+        font-weight: 700;
+        font-style: normal;
+      }
+      
+.montserrat-letters {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+.nav-item{
+  width: 100%;
+  text-align: start;
+  padding: 1rem 0.1rem !important;
+}
+.nav-brand{
+  display: none;
+} 
+nav .nav-link .span {
+  max-width: 0;
+  overflow: hidden;
+  display: none;
+  transition: max-width 0.3s ease;
+}
+.nav-item:hover{
+  background-color: #E9C46A;
+}
+      .fa-bell:hover {
+        color: yellow !important;
+      }
+      .fa-circle-user:hover {
+        color: rgb(25, 235, 25) !important;
+      }
+    
+     
+      /* .form-control::after{
+          content: 'hiii';
+          position: absolute;
+          font-size: 40px;
+          color: red;
+          left: 0;
+          height: 100px;
+          width: 100px;
+          background-color: red;
+      } */
+    
+       .nav-link{
+        color: rgb(255, 255, 255) !important;
+        display: block;
+        padding: 1rem !important;
+       }
+       .active-nav{
+        color: #E9C46A !important;
+       }
+       

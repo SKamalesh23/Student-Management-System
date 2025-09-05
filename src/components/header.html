@@ -1,0 +1,66 @@
+<html>
+    <body>
+                <div class="modal fade" id="log_out_modal" tabindex="-1" aria-hidden="false">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-body">
+              <h5 class="text-center fw-bold">Confirm Log out</h5>
+              <div class="d-flex justify-content-around pt-3">
+              <button class="btn btn-warning w-25">Yes</button><button class="btn btn-secondary w-25" data-bs-dismiss="modal">No</button>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+        <div class="d-flex justify-content-between">
+  <div class="mt-3 text-white titillium-web-semibold fs-4 nav-brand1">
+    <img src="../../public/assets/brand-logo.png" height="50px" />
+  </div>
+  <div class="d-flex">
+    <div class="p-3 dropdown alert">
+      <i
+        class="fa-solid fa-bell position-relative fs-3 text-warning position-relative" id="bell" role="button" aria-expanded="false"
+        ><span
+          class="position-absolute top-0 left translate-middle p-2 bg-danger border border-light rounded-circle"
+        >
+          <span class="visually-hidden">Alerts</span>
+        </span></i
+      >
+      <ul class="dropdown-menu end-0" aria-labelledby="bell">
+        <li><a class="dropdown-item" href="#">Action</a></li> 
+        <li><a class="dropdown-item" href="#">Another action</a></li>
+        <li><a class="dropdown-item" href="#">Something else here</a></li>
+      </ul>
+    </div>
+    <div class="p-2">
+      <form class="p-1">
+        <input
+          type="text"
+          class="form-control border border-dark bg-light"
+          placeholder="🔍︎Search Student"
+        />
+      </form>
+    </div>
+    <div
+      class="d-flex border border-light rounded p-2 align-items-center gap-2 user dropdown" role="button" id="user"
+    >
+      <i class="fa-solid fa-circle-user fs-2"></i>
+      <div class="d-flex flex-column">
+        <div>John Cena</div>
+        <div class="text-center text-primary" style="font-size: 14px">
+          Teacher
+        </div>
+      </div>
+      <div><span class="dropdown-toggle pt-5"></span></div>
+      <!-- <div class="dropdown-menu top-100 end-0 border shadow-lg d-flex justify-content-center" aria-labelledby="#user">
+        <ul style="list-style: none;" class="text-start">
+            <li class="text-start">John Cena</li>
+            <li class="text-start text-success">Maths</li>
+            <li class="text-start text-primary">ucantseeme@gmail.com</li>
+        </ul> -->
+  </div>
+</div>
+    <script src="../js/header.js"></script>
+    </body>
+</html>

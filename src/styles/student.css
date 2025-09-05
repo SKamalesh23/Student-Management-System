@@ -1,0 +1,46 @@
+@property --myColor {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #264653;
+}
+
+.modal-dialog{
+    max-width: 1000px !important;
+}.modal-content{
+    width: 900px;
+}
+input,.form-select{
+    width: 223.2px !important;
+}
+form h3{
+    color: var(--myColor) !important;
+}
+.form-label{
+    font-weight: 600 !important;
+}
+.btn-close{
+    left: 93%;
+    top: 4%;
+    /* padding: 2rem; */
+}
+
+.modal-dialog-pop {
+    display: flex;
+    justify-content: center;
+    /* background-color: #3CF852; */
+    border-radius: 50%;
+}
+
+.modal-content-pop {
+    background-color: rgb(40, 235, 60);
+    color: #fff;
+    text-align: center;
+    font-size: 20px;
+    width: 400px !important;
+    /* border-bottom: 2px solid white; */
+    /* box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5); */
+
+}
+.modal-body-pop{
+    background-color: #3CF852;
+}

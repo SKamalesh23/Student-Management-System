@@ -1,0 +1,63 @@
+@property --myColor {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #A73CF8;
+}
+.table tbody tr td button{
+            background-color: #3CF852;
+        }
+#add_teacher{
+    background-color: var(--myColor);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+}
+.btn-close{
+    left: 93%;
+    top: 4%;
+    /* padding: 2rem; */
+}
+.modal-dialog-pop {
+    display: flex;
+    justify-content: center;
+    /* background-color: #3CF852; */
+    border-radius: 50%;
+}
+
+.modal-content-pop {
+    background-color: rgb(40, 235, 60);
+    color: #fff;
+    text-align: center;
+    font-size: 20px;
+    width: 400px;
+    /* border-bottom: 2px solid white; */
+    /* box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5); */
+
+}
+.modal-body-pop{
+    background-color: #3CF852;
+}
+.modal-dialog-err {
+    display: flex;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.modal-content-err {
+    background-color: #ef1f1f;
+    color: #fff;
+    text-align: center;
+    font-size: 20px;
+    width: 350px;
+    /* border-bottom: 2px solid white; */
+    /* box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5); */
+
+}
+.modal-body-err{
+    background-color: #ef1f1f;
+}
+#teacher_submit_modal{
+    border-radius: 50%;
+}
+#teacher_submit{
+    background-color: #E9C46A;
+}
