@@ -162,10 +162,11 @@ $(document).ready(() => {
 
   //dataTable
   $.ajax({
-    method: "GET",
+    method: "POST",
     url: "https://dev-api.humhealth.com/StudentManagementAPI/students/list",
-    data: filter,
+    data: JSON.stringify(filter),
     dataType: "json",
+    contentType:'application/json',
     success: function (data) {
       console.log(data);
       const table = $("#table").DataTable({

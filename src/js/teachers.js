@@ -3,15 +3,17 @@ $(document).ready(() => {
   $("header").load("../components/header.html");
 
   $.ajax({
-    method: "GET",
+    method: "POST",
     url: "https://dev-api.humhealth.com/StudentManagementAPI/teachers/list",
     dataType: "json",
-    success: function (data) {
-      console.log(data.data);
+    contentType:'application/json',
+    success: function (response) {
+      console.log(response.data);
 
       const table = $("#table").DataTable({
         sort: false,
         ajax: {
+          method:'POST',
           url: "https://dev-api.humhealth.com/StudentManagementAPI/teachers/list",
           dataSrc: "data", // ✅ tell DataTables to use response.data
         },
