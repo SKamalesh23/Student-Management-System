@@ -131,7 +131,7 @@ $(document).ready(() => {
   const isActive = val ? (val === "A" ? true : false) : null;
   let isHosteller = false;
   let isDayscholar = false;
-
+let count = 0
   const res_val = $("#resident").val();
 
   if (res_val === "H") {
@@ -158,7 +158,6 @@ $(document).ready(() => {
     length: noe,
   };
   console.log(filter);
-  
 
   //dataTable
   $.ajax({
@@ -166,13 +165,54 @@ $(document).ready(() => {
     url: "https://dev-api.humhealth.com/StudentManagementAPI/students/list",
     data: JSON.stringify(filter),
     dataType: "json",
-    contentType:'application/json',
+    contentType: "application/json",
     success: function (data) {
       console.log(data);
+      count = data.recordsTotal
       const table = $("#table").DataTable({
         sort: false,
-        data: data.data,
-        dom: '<"dt-header d-flex justify-content-between"<"d-flex justify-content-between"<"search-factors dt-search d-flex justify-content-between mx-3">>>rt<"d-flex justify-content-between"<i><p>>',
+        paging:true,
+        ajax: {
+          url: "https://dev-api.humhealth.com/StudentManagementAPI/students/list",
+          type: "POST",
+          contentType: "application/json",
+          data: function (d) {
+            const val = $("#active").val();
+            const isActive = val ? (val === "A" ? true : false) : null;
+            let isHosteller = false;
+            let isDayscholar = false;
+            const res_val = $("#resident").val();
+
+            if (res_val === "H") {
+              isHosteller = true;
+            } else if (res_val === "D") {
+              isDayscholar = true;
+            }
+            // if val is empty/undefined → both remain false
+            const searchBy = $("#search_by").val();
+            const searchValue = $("#search_value").val();
+            let noe = $("#noe").val();
+            if (noe) {
+              noe = parseInt(noe);
+            } else {
+              noe = 10;
+            }
+            const filter = {
+              isActive: isActive,
+              isHosteller: isHosteller,
+              isDayScholar: isDayscholar,
+              searchBy: searchBy,
+              searchValue: searchValue,
+              start: 0,
+              length: noe,
+            };
+            console.log("after-.-->",filter);
+            
+            return JSON.stringify(filter);
+          },
+          dataSrc: "data", // tell DataTables to use response.data
+        },
+dom: '<"dt-header d-flex flex-column justify-content-between w-100" <"d-flex justify-content-between px-5 w-100"<"search-factors dt-search d-flex justify-content-between mx-3 w-100" >>>rt<"d-flex justify-content-between"<i>p>',
         columns: [
           {
             title: "Student ID",
@@ -182,36 +222,148 @@ $(document).ready(() => {
             title: "Student Name",
             data: null,
             render: function (data, type, row) {
-              return `${data.firstName} ${data.lastName}`;
+              return `<b class="fw-bold">${data.firstName} ${data.lastName}</b>`;
             },
+          },
+          {
+            title:'Class',
+            data:"studentClass"
           },
           {
             title: "Student Email",
             data: "studentEmail",
           },
           {
+            title: "Student Status",
+            data:null,
+            render:function(data,type,row){
+              const resident = data.activeStatus
+              if(resident=="A"){
+              return `<div class=" d-flex justify-content-center"><div class="bg-sm  text-success  w-25 active-student" id="active"  data-id="${data.id}" style="background-color:#DCFCE7;border-radius:20px" role="button">Active</div></div>`
+
+              }
+              else{
+              return `<div class=" d-flex justify-content-center"><div class="bg-sm  text-danger  w-25 active-student" id="inactive" data-id="${data.id}" style="background-color:#FEE2E2;border-radius:20px" role="button">Inactive</div></div>`
+
+              }
+              
+
+            }
+          },
+          {
             title: "Actions",
             data: null,
-            render: function () {
-              return `<i class="fa-solid fa-pen-to-square text-secondary"></i>&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-trash text-danger"></i>`;
+            render: function (data,type,row) {
+              return `<i class="fa-solid fa-pen-to-square text-secondary" role="button" data-id="${data.id}"></i>`;
             },
           },
         ],
         initComplete: function () {
-          $(".search-factors").append("");
+          $(".search-factors")
+            .append(`<form class="d-flex justify-content-around w-100 gap-2"><div><label class="form-label m-0 p-0">Active Status</label><select class="form-select" id="active">
+            <option value="" selected></option>
+            <option value="A">Active</option>
+            <option value="NA">Inactive</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label m-0 mx-3 p-0">Hostel/Dayscholar</label
+          ><select class="form-select" id="resident">
+            <option value="" disabled selected>Select Residence</option>
+            <option value="D">Dayscholar</option>
+            <option value="H">Hostel</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label p-0 m-0">Search By</label
+          ><select class="form-select" id="search_by">
+            <option value="" selected>Select </option>
+            <option value="id">Id</option>
+            <option value="firstName">FirstName</option>
+            <option value="lastName">LastName</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label p-0 m-0">Search Value</label
+          ><input id="search_value" type="text" class="form-control" />
+        </div>
+        <div class="">
+          <label class="form-label m-0 p-0">No. of Entries</label>
+          <select class="form-select" id="noe">
+              <option value="10" selected>10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+          </select>
+        </div>
+        <div>
+          <button type="button" id="search_button" class="btn btn-primary mt-4">
+            Submit
+          </button>
+        </div>
+      </form>`);
+      $("#table").on("click",".fa-pen-to-square",function(){
+        const id = $(this).data("id")
+        $.ajax({
+          method:"GET",
+          url:`https://dev-api.humhealth.com/StudentManagementAPI/students/get?id=${id}`,
+          dataType:'json',
+          success:function(response){
+            console.log("::::::::",response);
+            
+            const  res = response.data
+            const fname = res.firstName
+            $('#firstName').val(fname) 
+          }
+        })
+          $("#add_submit").text("Update")
+            $("#student_submit_modal").modal("show");
+
+        
+
+      })
+      $("#table").on("click",".active-student",function(){
+        // alert("clicked")
+        const id = $(this).data("id");
+        
+        const cal = $(this).attr("id") ==='active' ? false : true
+        console.log("cal->",cal);
+        $("#student_status").modal("show")
+        $("#ok").click(()=>{
+           $.ajax({
+          method:"POST",
+          url:`https://dev-api.humhealth.com/StudentManagementAPI/students/update/status?toActivate=${cal}&studentId=${id}&teacherId=9`,
+          dataType:'json',
+          success:function(){
+            table.ajax.reload();
+        $("#student_status").modal("hide")
+
+
+          }
+        })
+
+        })
+       
+        
+      })
+     const dt_length = $("#dt-length-0").val()
+      const page = $(".pagination .active button").text()
+      const count_to = page*dt_length 
+      $(".show-entries").append(`<p>Show ${page*dt_length +1 -dt_length} to ${count_to} of ${count} entries</p>`)
           $("#search_button").click(() => {
-            const search_value = $("#search_value").val();
-            const noe = $("#noe").val();
-            const search_by = $("#search_by").val();
-            const active = $("#active").val();
-            filteredTable(search_by, search_value, noe, active);
+            table.ajax.reload();
           });
+          $(".pagination .active button").click(()=>{
+            alert("hii")
+            table.ajax.reload();
+
+          })
         },
       });
     },
-    error:function(xhr){
-      console.error("Error",xhr)
-    }
+    error: function (xhr) {
+      console.error("Error", xhr);
+    },
   });
 
   $("#add_student").click(() => {
@@ -292,3 +444,17 @@ $(document).ready(() => {
 });
 function apiCall() {}
 function check() {}
+$("#ok").on("click", function () {
+  const $btn = $(this);
+  $btn.prop("disabled", true).html(`
+    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+    Processing...
+  `);
+
+  // simulate async action (AJAX)
+  setTimeout(() => {
+    // reset button or close modal
+    $btn.prop("disabled", false).text("Yes");
+    $("#student_status").modal("hide");
+  }, 2000);
+});

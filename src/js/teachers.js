@@ -35,7 +35,7 @@ $(document).ready(() => {
         ],
         initComplete: function () {
           $(".but").append(
-            "<form><label class='mx-3' id='add_teacher'><button type='button' class='btn btn-default text-light inter-table rounded-lg' id='add_teacher'>+ Add Teacher</button></label></form>"
+            "<form><label class='mx-3 mt-4' id='add_teacher'><button type='button' class='btn btn-default text-light inter-table rounded-lg' id='add_teacher'>+ Add Teacher</button></label></form>"
           );
           $(".inp").append(
             '<div><label class="form-label p-0 m-0">Search By</label><select id="columnSelect" class="form-select"><option value="1">Name</option><option value="0">ID</option></select></div><div>&nbsp &nbsp;</div><div><label class="form-label p-0 m-0 ">Search Value</label><input id="search_value" type="text" class="form-control" /></div>'

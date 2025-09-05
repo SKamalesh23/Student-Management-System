@@ -33,10 +33,16 @@
     <title>Document</title>
   </head>
   <body>
-    <nav></nav>
+    <nav class="nav-custom"></nav>
     <main class="montserrat-text flex-grow-1 p-4" style="z-index: -1">
       <header></header>
-      <div class="d-flex justify-content-end pt-5">
+       <h2
+        class="fw-bold mt-1"
+        style="color: #e9c46a; text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5)"
+      >
+        Student Management
+      </h2>
+      <div class="d-flex justify-content-end pt-1 pb-3">
         <form class="px-3">
           <button
             type="button"
@@ -122,7 +128,7 @@
                     <select class="form-select" id="activeStatus">
                       <option value="" selected disabled>Select Status</option>
                       <option value="A">Active</option>
-                      <option value="NA">Inactive</option>
+                      <option value="I">Inactive</option>
                     </select>
                   </div>
                   <div class="form-group">
@@ -191,47 +197,32 @@
         </div>
         
       </div>
-      <form class="d-flex justify-content-around">
-        <div>
-          <label class="form-label m-0 p-0">Active Status</label
-          ><select class="form-select" id="active">
-            <option value="" selected></option>
-            <option value="A">Active</option>
-            <option value="NA">Inactive</option>
-          </select>
-        </div>
-        <div>
-          <label class="form-label m-0 mx-3 p-0">Hostel/Dayscholar</label
-          ><select class="form-select" id="resident">
-            <option value="" disabled selected>Select Residence</option>
-            <option value="Dayscholar">Dayscholar</option>
-            <option value="Hostel">Hostel</option>
-          </select>
-        </div>
-        <div>
-          <label class="form-label p-0 m-0">Search By</label
-          ><select class="form-select" id="search_by">
-            <option value="" selected>Select </option>
-            <option value="id">Id</option>
-            <option value="firstName">FirstName</option>
-            <option value="lastName">LastName</option>
-          </select>
-        </div>
-        <div>&nbsp &nbsp;</div>
-        <div>
-          <label class="form-label p-0 m-0">Search Value</label
-          ><input id="search_value" type="text" class="form-control" />
-        </div>
-        <div class="mx-3">
-          <label class="form-label m-0 p-0">No. of Entries</label>
-          <input type="text" id="noe" class="form-control" />
-        </div>
-        <div>
-          <button type="button" id="search_button" class="btn btn-primary mt-4">
-            Submit
-          </button>
-        </div>
-      </form>
+    <div class="modal fade" id="student_status" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm" style="width: 400px;">
+    <div class="modal-content rounded-4 shadow-lg border-0">
+      
+      <!-- Header -->
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-semibold text-dark">Confirm Action</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body text-center">
+        <p class="mb-0 fs-6 text-secondary">Are you sure you want to change the student’s status?</p>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer border-0 justify-content-center gap-3">
+        <button class="btn btn-success px-4 rounded-pill" id="ok">Yes</button>
+        <button class="btn btn-outline-secondary px-4 rounded-pill" data-bs-dismiss="modal">No</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+      
       <div class="table-container">
         <table class="table text-center" id="table">
           <thead>
@@ -239,6 +230,7 @@
               <th>Student ID</th>
               <th>Student Name</th>
               <th>Student Mail</th>
+              <th>Student Status</th>
               <th>Actions</th>
             </tr>
           </thead>

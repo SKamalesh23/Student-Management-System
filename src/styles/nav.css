@@ -3,7 +3,7 @@
   padding: 0;
   margin: 0;
 }
-nav{
+.nav-custom{
   position: fixed;
   width:50px;
   transition: width 0.35s ease;
@@ -16,13 +16,13 @@ nav{
   color: #1E2A38;
   font-weight: 700;
 }
-nav:hover {
+.nav-custom:hover {
   width: 220px !important;
 }
 main{
   margin-left: 50px;
 }
-nav:hover ~ main{
+.nav-custom:hover ~ main{
   margin-left: 220px;
   transition: margin-left 0.35s ease;
 
@@ -31,13 +31,13 @@ nav:hover ~ main{
   color: #1E2A38 !important;
 }
 /* Expand brand inside */
-nav:hover .nav-brand {
+.nav-custom:hover .nav-brand {
   display: block;
 }
 .nav:hover .i{
   display: none;
 }
-nav:hover .nav-link .span {
+.nav-custom:hover .nav-link .span {
 display: inline;
   max-width: 200px; /* big enough for text */
 }
@@ -62,7 +62,7 @@ display: inline;
 .nav-brand{
   display: none;
 } 
-nav .nav-link .span {
+.nav-custom .nav-link .span {
   max-width: 0;
   overflow: hidden;
   display: none;

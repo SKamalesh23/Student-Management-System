@@ -60,3 +60,13 @@ tbody{
       border-color: var(--myColor) !important;
       color: #fff !important;
 }
+.dt-length{
+    padding-left: 3rem;
+    padding-top: 1rem;
+    padding-bottom: 0rem !important;
+
+}
+.dt-length select{
+    padding: 10px !important;
+    width: 60px !important;
+}
