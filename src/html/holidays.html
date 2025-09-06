@@ -26,6 +26,13 @@
 
         <link rel="stylesheet" href="../styles/holidays.css">
         <link rel="stylesheet" href="../styles/fonts.css">
+        <link rel="stylesheet" href="../styles/dataTable.css">
+
+<!-- Datatable -->
+  <script src="https://cdn.datatables.net/2.3.3/js/dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/2.3.3/js/dataTables.bootstrap5.min.js"></script>
+
+
     <title>Document</title>
 </head>
 <body>
@@ -40,10 +47,17 @@
       </h2>
       <div class="d-flex justify-content-end px-3">
             <button class="btn btn-default fs-4 text-primary" type="button" id="save_holiday">Add Holidays+</button>
+            <!-- <button class="btn btn-default fs-4 text-warning" type="button" id="save_holiday">Cancel Holidays</button> -->
+
       </div>
       <div class="save-holidays p-5 shadow-lg">
         <div class="d-flex justify-content-end m-0 p-0">
+          <div class="d-flex gap-5 justify-content-end w-100">
         <button class="btn btn-primary" id="save_button">Save Holidays <i class="fa-solid fa-floppy-disk"></i></button>
+        <button class="btn btn-second" id="cancel_button">Cancel Holidays <i class="fa-solid fa-ban"></i></button>
+
+
+          </div>
 
         </div>
 
@@ -63,6 +77,32 @@
             </div>
            
         </form>
+      
+      </div>
+      <div class="d-flex  gap-5 ">
+        <div class="form-check mt-3">
+  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+  <label class="form-check-label" for="flexCheckDefault">
+    Set all sundays as Holidays
+  </label>
+  <!-- <button type="button" class="btn btn-secondary mx-3">Save</button> -->
+      </div>
+      <button class="btn btn-secondary mt-2" id="save_sunday_button">Save</button>
+
+      </div>
+       
+      <div class="table-container mt-4">
+        <table class="table table-hover" id="table">
+          <thead>
+            <th>Id</th>
+            <th>Date</th>
+            <th>Reason</th>
+            <th>Status</th>
+          </thead>
+          <tbody>
+
+          </tbody>
+        </table>
       </div>
     </main>
     <script src="../js/holidays.js"></script>

@@ -6,3 +6,7 @@
 .init-trash:hover{
     cursor:no-drop
 }
+option{
+    max-height: 200px;
+    overflow: auto;
+}
