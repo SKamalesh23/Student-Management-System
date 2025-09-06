@@ -62,7 +62,7 @@ display: inline;
 .nav-brand{
   display: none;
 } 
-.nav-custom .nav-link .span {
+.nav .nav-link .span {
   max-width: 0;
   overflow: hidden;
   display: none;

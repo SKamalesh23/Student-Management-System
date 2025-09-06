@@ -10,3 +10,9 @@ input[type="text"]:focus,.btn:focus,.form-select:focus{
     border:0.5px solid #A73CF8 !important ;
     /* border: none; */
 }
+.btn-primary {
+  background-color: #1E2A38 !important;
+}
+.btn-second{
+  background-color: #E9C46A;
+}

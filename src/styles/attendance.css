@@ -1,0 +1,30 @@
+/* Example CSS (style.css) */
+.calendar-container {
+    width: 300px;
+    margin: 20px auto;
+    /* border: 1px solid #ccc; */
+    padding: 200px;
+    font-family: Arial, sans-serif;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    text-align: center;
+    padding: 8px;
+    border: 1px solid #eee;
+}
+
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.navigation span {
+    cursor: pointer;
+    font-weight: bold;
+}

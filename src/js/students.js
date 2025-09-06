@@ -127,11 +127,12 @@ function verify(input_arr) {
 $("header").load("../components/header.html");
 $(document).ready(() => {
   $("nav").load("../components/nav.html");
+  let update_id = 0;
   const val = $("#active").val();
   const isActive = val ? (val === "A" ? true : false) : null;
   let isHosteller = false;
   let isDayscholar = false;
-let count = 0
+  let count = 0;
   const res_val = $("#resident").val();
 
   if (res_val === "H") {
@@ -168,10 +169,10 @@ let count = 0
     contentType: "application/json",
     success: function (data) {
       console.log(data);
-      count = data.recordsTotal
+      count = data.recordsTotal;
       const table = $("#table").DataTable({
         sort: false,
-        paging:true,
+        paging: true,
         ajax: {
           url: "https://dev-api.humhealth.com/StudentManagementAPI/students/list",
           type: "POST",
@@ -206,13 +207,13 @@ let count = 0
               start: 0,
               length: noe,
             };
-            console.log("after-.-->",filter);
-            
+            console.log("after-.-->", filter);
+
             return JSON.stringify(filter);
           },
           dataSrc: "data", // tell DataTables to use response.data
         },
-dom: '<"dt-header d-flex flex-column justify-content-between w-100" <"d-flex justify-content-between px-5 w-100"<"search-factors dt-search d-flex justify-content-between mx-3 w-100" >>>rt<"d-flex justify-content-between"<i>p>',
+        dom: '<"dt-header d-flex flex-column justify-content-between w-100" <"d-flex justify-content-between px-5 w-100"<"search-factors dt-search d-flex justify-content-between mx-3 w-100" >>>rt<"d-flex justify-content-between"<i>p>',
         columns: [
           {
             title: "Student ID",
@@ -226,8 +227,8 @@ dom: '<"dt-header d-flex flex-column justify-content-between w-100" <"d-flex jus
             },
           },
           {
-            title:'Class',
-            data:"studentClass"
+            title: "Class",
+            data: "studentClass",
           },
           {
             title: "Student Email",
@@ -235,25 +236,20 @@ dom: '<"dt-header d-flex flex-column justify-content-between w-100" <"d-flex jus
           },
           {
             title: "Student Status",
-            data:null,
-            render:function(data,type,row){
-              const resident = data.activeStatus
-              if(resident=="A"){
-              return `<div class=" d-flex justify-content-center"><div class="bg-sm  text-success  w-25 active-student" id="active"  data-id="${data.id}" style="background-color:#DCFCE7;border-radius:20px" role="button">Active</div></div>`
-
+            data: null,
+            render: function (data, type, row) {
+              const resident = data.activeStatus;
+              if (resident == "A") {
+                return `<div class=" d-flex justify-content-center"><div class="bg-sm  text-success  w-25 active-student" id="active"  data-id="${data.id}" style="background-color:#DCFCE7;border-radius:20px" role="button">Active</div></div>`;
+              } else {
+                return `<div class=" d-flex justify-content-center"><div class="bg-sm  text-danger  w-25 active-student" id="inactive" data-id="${data.id}" style="background-color:#FEE2E2;border-radius:20px" role="button">Inactive</div></div>`;
               }
-              else{
-              return `<div class=" d-flex justify-content-center"><div class="bg-sm  text-danger  w-25 active-student" id="inactive" data-id="${data.id}" style="background-color:#FEE2E2;border-radius:20px" role="button">Inactive</div></div>`
-
-              }
-              
-
-            }
+            },
           },
           {
             title: "Actions",
             data: null,
-            render: function (data,type,row) {
+            render: function (data, type, row) {
               return `<i class="fa-solid fa-pen-to-square text-secondary" role="button" data-id="${data.id}"></i>`;
             },
           },
@@ -289,7 +285,7 @@ dom: '<"dt-header d-flex flex-column justify-content-between w-100" <"d-flex jus
         </div>
         <div class="">
           <label class="form-label m-0 p-0">No. of Entries</label>
-          <select class="form-select" id="noe">
+          <select class="form-select w-75" id="noe">
               <option value="10" selected>10</option>
               <option value="25">25</option>
               <option value="50">50</option>
@@ -302,62 +298,89 @@ dom: '<"dt-header d-flex flex-column justify-content-between w-100" <"d-flex jus
           </button>
         </div>
       </form>`);
-      $("#table").on("click",".fa-pen-to-square",function(){
-        const id = $(this).data("id")
-        $.ajax({
-          method:"GET",
-          url:`https://dev-api.humhealth.com/StudentManagementAPI/students/get?id=${id}`,
-          dataType:'json',
-          success:function(response){
-            console.log("::::::::",response);
-            
-            const  res = response.data
-            const fname = res.firstName
-            $('#firstName').val(fname) 
-          }
-        })
-          $("#add_submit").text("Update")
+          $("#table").on("click", ".fa-pen-to-square", function () {
+            update_id = $(this).data("id");
+            $.ajax({
+              method: "GET",
+              url: `https://dev-api.humhealth.com/StudentManagementAPI/students/get?id=${update_id}`,
+              dataType: "json",
+              success: function (response) {
+                const res = response.data;
+                console.log("::::::::", res);
+
+                const fname = res.firstName;
+                $("#firstName").val(fname);
+                const mname = res.middleName;
+                $("#middleName").val(mname);
+                const lname = res.lastName;
+                $("#lastName").val(lname);
+                const city = res.cityName;
+                $("#cityName").val(city);
+                const phoneNo = res.phoneNo;
+                $("#phoneNo").val(phoneNo);
+                const streetName = res.streetName;
+                $("#streetName").val(streetName);
+                const post = res.postalcode;
+                $("#postalcode").val(post);
+                const gender = res.gender;
+                $("#gender").val(gender);
+                const ar_date = res.dob.split("-");
+                // console.log(a);
+                // console.log(`${ar_date[2]}-${ar_date[0]}-${ar_date[1]}`)
+                $("#dob").val(`${ar_date[2]}-${ar_date[0]}-${ar_date[1]}`);
+                const emergencyContactPersonName =
+                  res.emergencyContactPersonName;
+                $("#emergencyContactPersonName").val(
+                  emergencyContactPersonName
+                );
+                const emergencyContactPhoneNumber =
+                  res.emergencyContactPhoneNumber;
+                $("#emergencyContactPhoneNumber").val(
+                  emergencyContactPhoneNumber
+                );
+                $("#studentEmail").val(res.studentEmail);
+                $("#studentClass").val(res.studentClass);
+                $("#residingStatus").val(res.residingStatus);
+              },
+            });
+            $("#add_submit").text("Update");
             $("#student_submit_modal").modal("show");
+          });
+          $("#table").on("click", ".active-student", function () {
+            // alert("clicked")
+            const id = $(this).data("id");
 
-        
+            const cal = $(this).attr("id") === "active" ? false : true;
+            console.log("cal->", cal);
+            $("#student_status").modal("show");
+            $("#ok").click(() => {
+              $.ajax({
+                method: "POST",
+                url: `https://dev-api.humhealth.com/StudentManagementAPI/students/update/status?toActivate=${cal}&studentId=${id}&teacherId=9`,
+                dataType: "json",
+                success: function () {
+                  $("#student_status").modal("hide");
 
-      })
-      $("#table").on("click",".active-student",function(){
-        // alert("clicked")
-        const id = $(this).data("id");
-        
-        const cal = $(this).attr("id") ==='active' ? false : true
-        console.log("cal->",cal);
-        $("#student_status").modal("show")
-        $("#ok").click(()=>{
-           $.ajax({
-          method:"POST",
-          url:`https://dev-api.humhealth.com/StudentManagementAPI/students/update/status?toActivate=${cal}&studentId=${id}&teacherId=9`,
-          dataType:'json',
-          success:function(){
-            table.ajax.reload();
-        $("#student_status").modal("hide")
-
-
-          }
-        })
-
-        })
-       
-        
-      })
-     const dt_length = $("#dt-length-0").val()
-      const page = $(".pagination .active button").text()
-      const count_to = page*dt_length 
-      $(".show-entries").append(`<p>Show ${page*dt_length +1 -dt_length} to ${count_to} of ${count} entries</p>`)
+                  table.ajax.reload();
+                },
+              });
+            });
+          });
+          const dt_length = $("#dt-length-0").val();
+          const page = $(".pagination .active button").text();
+          const count_to = page * dt_length;
+          $(".show-entries").append(
+            `<p>Show ${
+              page * dt_length + 1 - dt_length
+            } to ${count_to} of ${count} entries</p>`
+          );
           $("#search_button").click(() => {
             table.ajax.reload();
           });
-          $(".pagination .active button").click(()=>{
-            alert("hii")
+          $(".pagination .active button").click(() => {
+            alert("hii");
             table.ajax.reload();
-
-          })
+          });
         },
       });
     },
@@ -411,34 +434,90 @@ dom: '<"dt-header d-flex flex-column justify-content-between w-100" <"d-flex jus
       console.log(api);
 
       $(".err").remove();
+      if ($("#add_submit") === "Add") {
+        $.ajax({
+          method: "POST",
+          url: "https://dev-api.humhealth.com/StudentManagementAPI/students/save",
+          data: JSON.stringify(details),
+          contentType: "application/json",
+          dataType: "json",
+          success: function (response) {
+            console.log("success ---->", response);
 
-      $.ajax({
-        method: "POST",
-        url: "https://dev-api.humhealth.com/StudentManagementAPI/students/save",
-        data: JSON.stringify(details),
-        contentType: "application/json",
-        dataType: "json",
-        success: function (response) {
-          console.log("success ---->", response);
+            // const response = JSON.parse(res)
+            if (response.status === "success") {
+              $("#student_submit_modal").modal("hide");
+              // $("#student_success").modal("show");
+              // setTimeout(() => {
+              //   $("#student_success").modal("hide");
+              // }, 2000);
+              Swal.fire({
+                icon: "success",
+                title: "Generated",
+                text: ":white_check_mark: " + res.object,
+                showConfirmButton: false,
+                timer: 2000,
+              });
+            } else {
+              $("#studentEmail").after(
+                '<span class="text-danger err">Email already Exists</span>'
+              );
+            }
+          },
+          error: function (err) {
+            console.log("Error status : ", err);
+            alert("error occured see log");
+          },
+        });
+      } else {
+        const update_details = {
+          id: update_id,
+          ...details,
+          updatedTeacherId: 12,
+        };
+        $.ajax({
+          method: "POST",
+          url: "https://dev-api.humhealth.com/StudentManagementAPI/students/save",
+          data: JSON.stringify(update_details),
+          contentType: "application/json",
+          dataType: "json",
+          success: function (response) {
+            console.log("success ---->", response);
+            Swal.fire({
+              icon: "success",
+              title: "Generated",
+              text: "✅ " + response.data,
+              showConfirmButton: false,
+              timer: 2000,
+            });
+            // const response = JSON.parse(res)
+            if (response.status === "success") {
+              $("#student_submit_modal").modal("hide");
+              // $("#student_success").modal("show");
+              // setTimeout(() => {
+              //   $("#student_success").modal("hide");
+              // }, 2000);
+            } else {
+              $("#studentEmail").after(
+                '<span class="text-danger err">Email already Exists</span>'
+              );
+            }
+          },
+          error: function (xhr, status, error) {
+            console.log("Error status:", error);
 
-          // const response = JSON.parse(res)
-          if (response.status === "success") {
-            $("#student_submit_modal").modal("hide");
-            $("#student_success").modal("show");
-            setTimeout(() => {
-              $("#student_success").modal("hide");
-            }, 2000);
-          } else {
-            $("#studentEmail").after(
-              '<span class="text-danger err">Email already Exists</span>'
-            );
-          }
-        },
-        error: function (err) {
-          console.log("Error status : ", err);
-          alert("error occured see log");
-        },
-      });
+            Swal.fire({
+              icon: "error",
+              title: "Request Failed",
+              text:
+                "❌ " +
+                (xhr.responseJSON?.message || error || "Something went wrong"),
+              showConfirmButton: false,
+              timer: 2500,
+            });
+          },
+        });
+      }
     }
   });
 });

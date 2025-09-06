@@ -1,0 +1,8 @@
+.save-holidays{
+    display: none;
+    max-height: 400px;
+    overflow-y: auto;
+}
+.init-trash:hover{
+    cursor:no-drop
+}
