@@ -28,3 +28,9 @@ th, td {
     cursor: pointer;
     font-weight: bold;
 }
+.take-attendance:hover{
+    cursor: pointer;
+}
+.view-attendance:hover{
+    cursor: pointer;
+}

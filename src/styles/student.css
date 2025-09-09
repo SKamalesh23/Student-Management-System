@@ -54,3 +54,26 @@ form h3{
 .btn-pulse {
   animation: pulse 0.4s ease-in-out;
 }
+.view-name-init{
+    height: 200px;
+    width: 200px;
+    background-color: #abf1b3;
+    border-radius: 50%;
+}
+.fs-cus{
+    font-size: 100px;
+}
+
+.line{
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+.line::after{
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    width: 350px;
+    background: #999a99;
+}

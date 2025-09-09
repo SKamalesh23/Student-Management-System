@@ -70,3 +70,12 @@ tbody{
     padding: 10px !important;
     width: 60px !important;
 }
+.pagination{
+    display: flex;
+    gap: 0.2rem;
+    margin-right: 1rem;
+}
+.pagination li button{
+    border-radius: 10px;
+    border: 1px solid var(--myColor);
+}

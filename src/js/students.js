@@ -191,7 +191,7 @@ $(document).ready(() => {
             }
             // if val is empty/undefined → both remain false
             const searchBy = $("#search_by").val();
-            const searchValue = $("#search_value").val();
+            const searchValue = $("#search_value").val()
             let noe = $("#noe").val();
             if (noe) {
               noe = parseInt(noe);
@@ -250,14 +250,14 @@ $(document).ready(() => {
             title: "Actions",
             data: null,
             render: function (data, type, row) {
-              return `<i class="fa-solid fa-pen-to-square text-secondary" role="button" data-id="${data.id}"></i>`;
+              return `<i class="fa-solid fa-pen-to-square text-secondary mx-3" role="button" data-id="${data.id}"></i><i class="fa-regular fa-eye mx-3 eye" data-id="${data.id}" role="button"></i>`;
             },
           },
         ],
         initComplete: function () {
           $(".search-factors")
             .append(`<form class="d-flex justify-content-around w-100 gap-2"><div><label class="form-label m-0 p-0">Active Status</label><select class="form-select" id="active">
-            <option value="" selected></option>
+            <option value="" selected>All</option>
             <option value="A">Active</option>
             <option value="NA">Inactive</option>
           </select>
@@ -265,7 +265,7 @@ $(document).ready(() => {
         <div>
           <label class="form-label m-0 mx-3 p-0">Hostel/Dayscholar</label
           ><select class="form-select" id="resident">
-            <option value="" disabled selected>Select Residence</option>
+            <option value=""  selected>All</option>
             <option value="D">Dayscholar</option>
             <option value="H">Hostel</option>
           </select>
@@ -274,9 +274,9 @@ $(document).ready(() => {
           <label class="form-label p-0 m-0">Search By</label
           ><select class="form-select" id="search_by">
             <option value="" selected>Select </option>
-            <option value="id">Id</option>
-            <option value="firstName">FirstName</option>
-            <option value="lastName">LastName</option>
+            <option value="studentEmail">Email</option>
+            <option value="fullName">FirstName</option>
+            <option value="phoneNo">Phone Number</option>
           </select>
         </div>
         <div>
@@ -298,6 +298,37 @@ $(document).ready(() => {
           </button>
         </div>
       </form>`);
+      $("#table").on("click",".eye",function(){
+        const view_id = $(this).data("id");
+        console.log(view_id);
+        
+        // alert("-->",view_id)
+        $.ajax({
+          method:"GET",
+          url: `https://dev-api.humhealth.com/StudentManagementAPI/students/get?id=${view_id}`,
+          dataType:"json",
+          success:function(response){
+            const res = response.data;
+            $(".view-name").text(res.firstName + res.lastName)
+            $(".fs-cus").text(res.firstName[0])
+            $(".view-class").text(res.studentClass)
+            $(".view-city").text(res.cityName)  
+            $(".view-str").text(res.streetName)
+            $(".view-pin").text(res.postalcode)
+            $(".view-mail").text(res.studentEmail)
+            $(".view-ecn").text(res.emergencyContactPersonName)
+            $(".view-ecp").text(res.emergencyContactPhoneNumber)
+            $(".view-gender").text(res.gender==="M"?"Male":"Female")
+            $(".view-phone").text(res.phoneNo)
+            $(".view-id").text(res.id)
+            const ar_date = res.dob.split("-");
+                // console.log(a);
+                // console.log(`${ar_date[2]}-${ar_date[0]}-${ar_date[1]}`)
+                $(".view-dob").text(`${ar_date[0]}-${ar_date[1]}-${ar_date[2]}`);
+          }
+        })
+        $("#view_student_modal").modal("show")
+      })
           $("#table").on("click", ".fa-pen-to-square", function () {
             update_id = $(this).data("id");
             $.ajax({
@@ -341,10 +372,12 @@ $(document).ready(() => {
                 $("#studentEmail").val(res.studentEmail);
                 $("#studentClass").val(res.studentClass);
                 $("#residingStatus").val(res.residingStatus);
+                $("")
               },
             });
             $("#add_submit").text("Update");
             $("#student_submit_modal").modal("show");
+
           });
           $("#table").on("click", ".active-student", function () {
             // alert("clicked")
