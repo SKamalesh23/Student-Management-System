@@ -18,6 +18,9 @@ th{
 tbody{
     border-top:0.3px solid #fff !important ;
 }
+.btn-second{
+    background-color: rgb(246, 212, 73) !important;
+}
 
 .table-container{
     border-top: 0.05px solid rgba(0, 0, 0, 0.1);
@@ -31,7 +34,7 @@ tbody{
     margin-left: 20px;
 }
 
-.table-container table tbody tr td{
+.table-container table tbody tr td,#table td{
     text-align: center;
     font-weight: 200;
     font-size: 14px;
@@ -78,4 +81,8 @@ tbody{
 .pagination li button{
     border-radius: 10px;
     border: 1px solid var(--myColor);
+}
+.fa-pen-to-square:hover{
+    cursor:pointer;
+    color:rgb(246, 212, 73) !important;
 }

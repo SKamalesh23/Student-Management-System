@@ -339,7 +339,7 @@ function viewAttendanceTable() {
         }));
       },
     },
-    dom: "<dt-header <'search-factors d-flex justify-content-around mx-2'>t<'d-flex justify-content-between'<i><p>>>",
+    dom: "<dt-header <'search-factors'>t<'d-flex justify-content-between'<i><p>>>",
     columns: [
       { data: "studentId", title: "ID" },
       { data: "studentFirstName", title: "First Name" },
@@ -362,7 +362,12 @@ function viewAttendanceTable() {
     initComplete: function () {
       console.log("Attendance table loaded ✅");
       $(".search-factors").append(`
-      <form class="d-flex gap-5 align-items-center fill-form">
+      <div class=" d-flex justify-content-end">
+      <button class="btn btn-primary add-fill">Add Filters</button>
+        
+      </div>
+      <div style="display:none" class="fill">
+      <form class="d-flex gap-5 align-items-center fill-form" >
       <div class="form-group">
           <label class="form-label">Quarter</label>
           <select name="" id="quarter" class="form-select">
@@ -398,10 +403,14 @@ function viewAttendanceTable() {
           <input type="checkbox" class="form-check-input" id="eca" />
           <label class="form-label">Extra Curricular Activities</label>
 </div>
-<div class="form-group mt-5"><button type="button" class="btn btn-primary sub">Submit</button</div>
+<div class="form-group mt-5"><button type="button" class="btn btn-second sub">Submit</button</div>
 
       </form>
+      </div>
     `);
+    $(document).on("click",".add-fill",function(){
+        $(".fill").slideToggle()
+    })
     $(".fill-form").on("click",".sub",function(){
       console.log("clickeddd");
       
