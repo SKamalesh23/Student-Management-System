@@ -98,4 +98,24 @@ display: inline;
        .active-nav{
         color: #E9C46A !important;
        }
-       
+       .outline{
+        margin: 0;
+        padding: 0;
+        height: 15px;
+        width: 100%;
+        background-color: #E9C46A;
+        position: relative;
+       }
+       .outline::after{
+        content :"";
+        position: absolute;
+        width: 100%;
+        height: 7px;
+        top: 100%;
+        background-color: #e9c56a60;
+        z-index: 999;
+       }
+       main{
+        padding-top: 0 !important;
+        margin-top:0
+       }

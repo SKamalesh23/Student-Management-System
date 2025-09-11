@@ -487,7 +487,7 @@ $(document).ready(() => {
               Swal.fire({
                 icon: "success",
                 title: "Generated",
-                text: ":white_check_mark: " + res.object,
+                text: "✅ " + res.data,
                 showConfirmButton: false,
                 timer: 2000,
               });

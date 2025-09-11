@@ -34,3 +34,6 @@ th, td {
 .view-attendance:hover{
     cursor: pointer;
 }
+label{
+    font-weight: 600;
+}
