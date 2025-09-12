@@ -312,7 +312,7 @@ function viewAttendanceTable() {
     }
   }
 
-  let sickLeave = $("#sick").length ? ($("#sick").is(":checked") ? "Y" : null) : null;
+  let sickLeave = $("#sick").length ? ($("#sick").is(":checked") ? "Y"  : null) : null;
   let eca = $("#eca").length ? ($("#eca").is(":checked") ? "Y" : null) : null;
   function getMonth(m){
     const ar = m.split('-')
@@ -423,6 +423,32 @@ function viewAttendanceTable() {
       console.log("clickeddd");
       
       table.ajax.reload()
+    })
+    $(".fill-form").on("change","#sick",function(){
+      let $sick = $(this).is(":checked")
+      if($sick){
+        $("#today").prop("disabled",true)
+        $("#attendanceDate").prop("disabled",true)
+      }
+      else{
+        $("#today").prop("disabled",false)
+        $("#attendanceDate").prop("disabled",false)
+
+
+      }
+    })
+    $(".fill-form").on("change","#eca",function(){
+      let $sick = $(this).is(":checked")
+      if($sick){
+        $("#today").prop("disabled",true)
+        $("#attendanceDate").prop("disabled",true)
+      }
+      else{
+        $("#today").prop("disabled",false)
+        $("#attendanceDate").prop("disabled",false)
+
+
+      }
     })
     $(".fill-form").on("change","#today",function(){
       $today = $(this).is(":checked")

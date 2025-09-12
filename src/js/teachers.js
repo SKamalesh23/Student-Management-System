@@ -23,15 +23,15 @@ $(document).ready(() => {
           { data: "teacherName" },
           { data: "teacherSpeciality" },
           { data: "teacherEmail" },
-          {
-            data: null,
-            render: (row) => {
-              return `
-              <i class="fa-regular fa-pen-to-square text-secondary edit-btn btn-default" btn data-id="${row.teacherId}"></i>&nbsp;&nbsp;
-              <i class="fa-solid fa-trash text-danger delete-btn btn btn-default" data-id="${row.teacherId}"></i>
-            `;
-            },
-          },
+          // {
+          //   data: null,
+          //   render: (row) => {
+          //     return `
+          //     <i class="fa-regular fa-pen-to-square text-secondary edit-btn btn-default" btn data-id="${row.teacherId}"></i>&nbsp;&nbsp;
+          //     <i class="fa-solid fa-trash text-danger delete-btn btn btn-default" data-id="${row.teacherId}"></i>
+          //   `;
+          //   },
+          // },
         ],
         initComplete: function () {
           $(".but").append(

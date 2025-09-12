@@ -19,6 +19,8 @@ $(document).ready(() => {
   maths.val("");
   science.val("");
   social.val("");
+  $(".err").remove()
+
 
   $(".save-marks").text("Save Marks");
 }

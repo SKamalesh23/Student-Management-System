@@ -125,7 +125,7 @@ function verify(input_arr) {
 
 // }
 let studentId = 0
-
+let count=0
 $("header").load("../components/header.html");
 $(document).ready(() => {
   $("nav").load("../components/nav.html");
@@ -180,6 +180,7 @@ $(document).ready(() => {
           type: "POST",
           contentType: "application/json",
           data: function (d) {
+            count = 0
             const val = $("#active").val();
             const isActive = val ? (val === "A" ? true : false) : null;
             let isHosteller = false;
@@ -217,6 +218,13 @@ $(document).ready(() => {
         },
         dom: '<"dt-header d-flex flex-column justify-content-between w-100" <"d-flex justify-content-between px-5 w-100"<"search-factors dt-search d-flex justify-content-between mx-3 w-100" >>>rt<"d-flex justify-content-between"<i>p>',
         columns: [
+          {
+            title:"S.No",
+            data:null,
+            render: function (data, type, row, meta) {
+    return meta.row + meta.settings._iDisplayStart + 1;
+  }
+          },
           {
             title: "Student ID",
             data: "id",
