@@ -290,7 +290,7 @@ function viewAttendanceTable() {
       contentType: "application/json",
       dataType: "json",
       data: function () {
-  let attend = $("#stat").length ? $("#stat").val() : null;
+  let attend = $("#stat").length ? $("#stat").val() : "";
 
   let today = $("#today").length ? $("#today").is(":checked") : null;
   let month = null;
@@ -301,6 +301,7 @@ function viewAttendanceTable() {
     today="Y"
     month = null;
     c_date = null;
+
   } else {
     today = "N"
     month = $("#month").length ? $("#month").val() : null;
@@ -311,14 +312,21 @@ function viewAttendanceTable() {
     }
   }
 
-  let sickLeave = $("#sick").length ? ($("#sick").is(":checked") ? true : null) : null;
-  let eca = $("#eca").length ? ($("#eca").is(":checked") ? true : null) : null;
-
+  let sickLeave = $("#sick").length ? ($("#sick").is(":checked") ? "Y" : null) : null;
+  let eca = $("#eca").length ? ($("#eca").is(":checked") ? "Y" : null) : null;
+  function getMonth(m){
+    const ar = m.split('-')
+    let month = ar[1]
+    if(parseInt(month)<10){
+      return parseInt(month[1])
+    }
+    return parseInt(month)
+  }
   const payload = {
     tookAttendance: attend,
     today: today,
     customDate: c_date,
-    month: null,
+    month: $("#month").length?getMonth($("#month").val()):null,
     sickLeaveFlag: sickLeave,
     ecaFlag: eca,
   };
@@ -379,8 +387,8 @@ function viewAttendanceTable() {
         <div class="form-group">
           <label class="form-label">Attendance</label>
           <select name="" id="stat" class="form-select">
-            <option value="Y">Present</option>
-            <option value="N">Absent</option>
+            <option value="P">Present</option>
+            <option value="A">Absent</option>
           </select>
         </div>
         <div class="form-group mt-5">
@@ -425,10 +433,18 @@ function viewAttendanceTable() {
         $("#month").val("")
         $("#attendanceDate").prop("disabled",true)
         $("#month").prop("disabled",true)
+    $("#sick").prop("disabled",true)
+    $("#eca").prop("disabled",true)
+    $("#sick").prop("checked", false);
+    $("#eca ").prop("checked", false);
+
+
       }
       else{
         $("#attendanceDate").prop("disabled",false)
         $("#month").prop("disabled",false)
+         $("#sick").prop("disabled",false)
+        $("#eca").prop("disabled",false)
 
 
       }

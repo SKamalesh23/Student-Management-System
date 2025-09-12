@@ -105,12 +105,22 @@
                 <label class="form-label">Social</label>
                 <input type="text" class="form-control" placeholder="Enter Social marks" id="social">
               </div>
-              <div class="d-grid">
-                <button type="button" class="btn btn-second save-marks">
-                  <i class="fa-solid fa-plus"></i> Save Marks
+              <div class="d-flex justify-content-around gap-5">
+                <button type="button" class="btn btn-second save-marks w-50">Save Marks
+                </button>
+                <button type="button" class="btn  btn-secondary cancel w-50" onclick="cancelSave()">Cancel
                 </button>
               </div>
             </form>
+            <div class="modal fade" id="success_modal">
+              <div class="modal-dialog rounded">
+                <div class="modal-content">
+                  <div class="modal-body">
+                    <h5 class="modal-success text-center text-white"></h5>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

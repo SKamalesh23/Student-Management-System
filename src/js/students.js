@@ -124,6 +124,8 @@ function verify(input_arr) {
 //     })
 
 // }
+let studentId = 0
+
 $("header").load("../components/header.html");
 $(document).ready(() => {
   $("nav").load("../components/nav.html");
@@ -301,6 +303,7 @@ $(document).ready(() => {
       $("#table").on("click",".eye",function(){
         const view_id = $(this).data("id");
         console.log(view_id);
+        studentId=view_id
         
         // alert("-->",view_id)
         $.ajax({
@@ -327,6 +330,70 @@ $(document).ready(() => {
                 $(".view-dob").text(`${ar_date[0]}-${ar_date[1]}-${ar_date[2]}`);
           }
         })
+         $.ajax({
+    url:`https://dev-api.humhealth.com/StudentManagementAPI/marks/profile?quarterAndYear=01/2025&studentId=${studentId}`,
+    type:"GET",
+    dataType:'json',
+    success:function(response){
+      console.log(response);
+      const data = response.data
+      $('.score-panel').html(
+        `  <form action="">
+                      <div class="d-flex gap-5">
+                        <div class="form-group">
+                          <label for="" class="form-label">Tamil</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            value="${data.tamil}"
+                            disabled
+                          />
+                        </div>
+                        <div class="form-group">
+                          <label for="" class="form-label">English</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            value="${data.english}"
+                            disabled
+                          />
+                        </div>
+                      </div>
+                      <div class="d-flex gap-5">
+                        <div class="form-group">
+                          <label for="" class="form-label">Maths</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            value="${data.maths}"
+                            disabled
+                          />
+                        </div>
+                        <div class="form-group">
+                          <label for="" class="form-label">SCience</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            value="${data.science}"
+                            disabled
+                          />
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="" class="form-label">Social Science</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          value="${data.socialScience}"
+                          disabled
+                        />
+                      </div>
+                      <h4 class="fw-bold text-center mt-4">Total Marks : <span class="text-success">${data.total}</span></h4>
+                    </form>`
+      )
+      
+    }
+  })
         $("#view_student_modal").modal("show")
       })
           $("#table").on("click", ".fa-pen-to-square", function () {
@@ -554,6 +621,12 @@ $(document).ready(() => {
     }
   });
 });
+$(".exam-score").click(()=>{
+  // alert("jjj")
+      $(".score-panel").slideToggle()
+
+ 
+})
 function apiCall() {}
 function check() {}
 $("#ok").on("click", function () {
