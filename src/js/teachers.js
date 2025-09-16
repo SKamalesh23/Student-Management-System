@@ -1,68 +1,46 @@
-$(document).ready(() => {
-  $("nav").load("../components/nav.html");
-  $("header").load("../components/header.html");
 
-  $.ajax({
-    method: "POST",
-    url: "https://dev-api.humhealth.com/StudentManagementAPI/teachers/list",
-    dataType: "json",
-    contentType:'application/json',
-    success: function (response) {
-      console.log(response.data);
+const custom = '../components/header.html';
+$("#header").load(custom, () => {
+  const script = document.createElement("script");
+  script.src = "../js/header.js";
+  script.onload = () => {
+    // Now <header-element> is defined
+    $("#header").append("<header-element></header-element>");
+  };
+  document.body.appendChild(script);
+});
 
-      const table = $("#table").DataTable({
-        sort: false,
-        ajax: {
-          method:'POST',
-          url: "https://dev-api.humhealth.com/StudentManagementAPI/teachers/list",
-          dataSrc: "data", // ✅ tell DataTables to use response.data
-        },
-        dom: '<"dt-header d-flex justify-content-between "<"but d-flex justify-content-between"l><"d-flex justify-content-between"<"inp dt-search d-flex justify-content-between mx-3">>>rt<"d-flex justify-content-between"<i><p>>',
-        columns: [
-          { data: "teacherId" },
-          { data: "teacherName" },
-          { data: "teacherSpeciality" },
-          { data: "teacherEmail" },
-          // {
-          //   data: null,
-          //   render: (row) => {
-          //     return `
-          //     <i class="fa-regular fa-pen-to-square text-secondary edit-btn btn-default" btn data-id="${row.teacherId}"></i>&nbsp;&nbsp;
-          //     <i class="fa-solid fa-trash text-danger delete-btn btn btn-default" data-id="${row.teacherId}"></i>
-          //   `;
-          //   },
-          // },
-        ],
-        initComplete: function () {
-          $(".but").append(
-            "<form><label class='mx-3 mt-4' id='add_teacher'><button type='button' class='btn btn-default text-light inter-table rounded-lg' id='add_teacher'>+ Add Teacher</button></label></form>"
-          );
-          $(".inp").append(
-            '<div><label class="form-label p-0 m-0">Search By</label><select id="columnSelect" class="form-select"><option value="1">Name</option><option value="0">ID</option></select></div><div>&nbsp &nbsp;</div><div><label class="form-label p-0 m-0 ">Search Value</label><input id="search_value" type="text" class="form-control" /></div>'
-          );
-          $("#search_value").on("keyup", function () {
-            console.log("logged");
+const nav_path = "../components/nav.html"
+$(".nav-custom").load(nav_path,()=>{
+  const script = document.createElement("script")
+  script.src="../js/nav.js";
+  script.onload = () =>{
+    $('.nav-custom').append("<custom-navbar></custom-navbar>")
+  }
+  document.body.appendChild(script)
+})
+const load_path = "../components/loader.html"
+$("#loader").load(load_path,()=>{
+  const script = document.createElement("script")
+  script.src = "../js/loader.js"
+  script.onload = () =>{
+    $("#loader").append("<custom-loader></custom-loader>")
+  }
+  document.body.appendChild(script)
 
-            const columnIndex = $("#columnSelect").val(); // "1" or "2"
-            const value = this.value;
-            console.log(value);
+})
+ 
 
-            table.column(columnIndex).search(value).draw();
-          });
-        },
-      });
-    },
-    error: function (xhr, status, error) {
-      console.error("Error:", error);
-    },
-  });
 
-  $("tbody tr td").css("text-align", "center");
+
+const Teacher = function(){
+  this.addTeacher = function(){
+    $("#teacher_submit").click(showMod)
+        $("tbody tr td").css("text-align", "center");
   // $("#myTable tr td .btn").click(()=>{
   //   console.log("hiii : ",this.currentElement);
 
   // })
-});
 function view(e) {
   const x = e.parentElement;
   console.log($(x).attr("key"));
@@ -185,3 +163,64 @@ function showMod() {
 $(document).on("click", "#add_teacher", function () {
   $("#teacher_modal").modal("show");
 });
+  }
+  this.showTeacher = function(){
+       $.ajax({
+    method: "POST",
+    url: "https://dev-api.humhealth.com/StudentManagementAPI/teachers/list",
+    dataType: "json",
+    contentType:'application/json',
+    success: function (response) {
+      console.log(response.data);
+
+      const table = $("#table").DataTable({
+        sort: false,
+        ajax: {
+          method:'POST',
+          url: "https://dev-api.humhealth.com/StudentManagementAPI/teachers/list",
+          dataSrc: "data", // ✅ tell DataTables to use response.data
+        },
+        dom: '<"dt-header d-flex justify-content-between "<"but d-flex justify-content-between"l><"d-flex justify-content-between"<"inp dt-search d-flex justify-content-between mx-3">>>rt<"d-flex justify-content-between"<i><p>>',
+        columns: [
+          { data: "teacherId" },
+          { data: "teacherName" },
+          { data: "teacherSpeciality" },
+          { data: "teacherEmail" },
+          // {
+          //   data: null,
+          //   render: (row) => {
+          //     return `
+          //     <i class="fa-regular fa-pen-to-square text-secondary edit-btn btn-default" btn data-id="${row.teacherId}"></i>&nbsp;&nbsp;
+          //     <i class="fa-solid fa-trash text-danger delete-btn btn btn-default" data-id="${row.teacherId}"></i>
+          //   `;
+          //   },
+          // },
+        ],
+        initComplete: function () {
+          $(".but").append(
+            "<form><label class='mx-3 mt-4' id='add_teacher'><button type='button' class='btn btn-default text-light inter-table rounded-lg' id='add_teacher'>+ Add Teacher</button></label></form>"
+          );
+          $(".inp").append(
+            '<div><label class="form-label p-0 m-0">Search By</label><select id="columnSelect" class="form-select"><option value="1">Name</option><option value="0">ID</option></select></div><div>&nbsp &nbsp;</div><div><label class="form-label p-0 m-0 ">Search Value</label><input id="search_value" type="text" class="form-control" /></div>'
+          );
+          $("#search_value").on("keyup", function () {
+            console.log("logged");
+
+            const columnIndex = $("#columnSelect").val(); // "1" or "2"
+            const value = this.value;
+            console.log(value);
+
+            table.column(columnIndex).search(value).draw();
+          });
+        },
+      });
+    },
+    error: function (xhr, status, error) {
+      console.error("Error:", error);
+    },
+  });
+  }
+}
+const teacherObj = new Teacher()
+teacherObj.showTeacher()
+teacherObj.addTeacher()

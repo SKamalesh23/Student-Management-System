@@ -4,7 +4,7 @@
   font-weight: 500;
   font-style: normal;
 }
-input[type="text"]:focus,.btn:focus,.form-select:focus{
+input[type="text"]:focus,input[type="password"]:focus,.btn:focus,.form-select:focus{
     box-shadow: none !important;
     outline: #A73CF8 !important;
     border:0.5px solid #A73CF8 !important ;

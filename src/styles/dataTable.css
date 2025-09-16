@@ -7,7 +7,7 @@
 
 thead{
     text-align: center;
-    background-color: var(#fff);
+    background-color: rgb(246, 212, 73) !important;
     color: #525252;
 }
 th{
@@ -23,6 +23,7 @@ tbody{
 }
 
 .table-container{
+    position: relative;
     border-top: 0.05px solid rgba(0, 0, 0, 0.1);
     max-width: 98vw;
     display: flex;

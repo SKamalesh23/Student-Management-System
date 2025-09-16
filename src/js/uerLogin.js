@@ -16,11 +16,11 @@ $(document).ready(()=>{
             $("#username").after("<span class='span'>Incorrect Username</span>")
         }
         if(pass.length===0){
-            $("#password").after("<span class='span'>Password is required</span>")
+            $(".err-pass").after("<span class='span'>Password is required</span>")
 
         }
         else if(!pass_regex){
-            $("#password").after("<span class='span'>Incorrect Password</span>")
+            $(".err-pass").after("<span class='span'>Incorrect Password</span>")
         }
         $(".span").css('color','red')
         if(user && pass && user_regex && pass_regex){
@@ -36,4 +36,17 @@ $(document).ready(()=>{
             console.log(user && pass && user_regex && pass_regex)
         }
     })
+})
+
+$(document).on("click",".eye",()=>{
+    const input = $("#password");
+
+    if (input.attr("type") === "password") {
+      input.attr("type", "text"); // show password
+      $(this).removeClass("fa-eye").addClass("fa-eye-slash");
+    } else {
+      input.attr("type", "password"); // hide password
+      $(this).removeClass("fa-eye-slash").addClass("fa-eye");
+    }
+
 })

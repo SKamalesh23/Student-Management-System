@@ -1,11 +1,42 @@
+const nav_path = "../components/nav.html"
+$(".nav-custom").load(nav_path,()=>{
+  const script = document.createElement("script")
+  script.src="../js/nav.js";
+  script.onload = () =>{
+    $('.nav-custom').append("<custom-navbar></custom-navbar>")
+  }
+  document.body.appendChild(script)
+})
+//header   
+const custom = '../components/header.html';
+$("#header").load(custom, () => {
+  const script = document.createElement("script");
+  script.src = "../js/header.js";
+  script.onload = () => {
+    // Now <header-element> is defined
+    $("#header").append("<header-element></header-element>");
+  };
+  document.body.appendChild(script);
+});
+//loader
+const load_path = "../components/loader.html"
+$("#loader").load(load_path,()=>{
+  const script = document.createElement("script")
+  script.src = "../js/loader.js"
+  script.onload = () =>{
+    $("#loader").append("<custom-loader></custom-loader>")
+  }
+  document.body.appendChild(script)
+
+})
 $(".table-container").load("../components/takeAttendance.html");
 $(".view-attendance").click(() => {
   $(".view-attendance")
-    .addClass("bg-secondary text-light")
-    .removeClass("text-dark");
+    .addClass("text-primary current-page")
+    .removeClass("text-secondary ");
   $(".take-attendance")
-    .addClass("text-dark")
-    .removeClass("bg-secondary text-light");
+    .addClass("text-secondary")
+    .removeClass("text-primary current-page");
   $(".table-container").load("../components/viewAttendance.html", function () {
     //  if ($.fn.DataTable.isDataTable("#table")) {
     //   $("#table").DataTable().clear().destroy();
@@ -17,11 +48,11 @@ $(".view-attendance").click(() => {
 });
 $(".take-attendance").click(() => {
   $(".take-attendance")
-    .addClass("bg-secondary text-light")
-    .removeClass("text-dark");
+    .addClass(" text-primary current-page")
+    .removeClass("text-secondary");
   $(".view-attendance")
-    .addClass("text-dark")
-    .removeClass("bg-secondary text-light");
+    .addClass("text-secondary")
+    .removeClass("text-primary current-page");
   $(".table-container").load("../components/takeAttendance.html", function () {
     // destroy if exists
     if ($.fn.DataTable.isDataTable("#table")) {
@@ -370,11 +401,8 @@ function viewAttendanceTable() {
     initComplete: function () {
       console.log("Attendance table loaded ✅");
       $(".search-factors").append(`
-      <div class=" d-flex justify-content-end">
-      <button class="btn btn-primary add-fill">Add Filters</button>
-        
-      </div>
-      <div style="display:none" class="fill">
+      <div class=" d-flex justify-content-center mb-1">
+      <div class="fill">
       <form class="d-flex gap-5 align-items-center fill-form" >
       <div class="form-group">
           <label class="form-label">Quarter</label>
@@ -411,18 +439,33 @@ function viewAttendanceTable() {
           <input type="checkbox" class="form-check-input" id="eca" />
           <label class="form-label">Extra Curricular Activities</label>
 </div>
-<div class="form-group mt-5"><button type="button" class="btn btn-second sub">Submit</button</div>
+<div class="form-group mt-5"><button type="button" class="btn btn-primary border-none sub">Submit</button></div>
+<div class="form-group mt-5"><button type="reset" class="btn btn-secondary border-none reset">Cancel</button></div>
 
       </form>
       </div>
     `);
+    $(".search-factors").on("change","input,select",()=>{
+      
+    $("#table tbody,tfoot").hide()
+    })
+    $(document).on("click",".reset",()=>{
+      $("#today").prop("disabled",false)
+      $("#attendanceDate").prop("disabled",false)
+      $("#today").prop("disabled",false)
+      $("#month").prop("disabled",false)
+
+
+
+    })
     $(document).on("click",".add-fill",function(){
         $(".fill").slideToggle()
     })
     $(".fill-form").on("click",".sub",function(){
       console.log("clickeddd");
-      
+       $("#table tbody,tfoot").show()
       table.ajax.reload()
+
     })
     $(".fill-form").on("change","#sick",function(){
       let $sick = $(this).is(":checked")
@@ -476,6 +519,12 @@ function viewAttendanceTable() {
       }
     })
       $("#table").on("click", ".show_absent", function () {
+        function getDayFunction(dateString) {
+      const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      const date = new Date(dateString); // e.g. "2025-09-18"
+      return days[date.getDay()];
+    }
+
         let table = $("#table").DataTable();
         let rowData = table.row($(this).closest("tr")).data();
 
@@ -497,11 +546,11 @@ function viewAttendanceTable() {
         } else {
           $modalTitle.text(`Absent Dates - ${rowData.studentFirstName}`);
           let list = rowData.absentDates
-            .map((d) => `<li class="">&#128198; ${d}</li>`)
+            .map((d) => `<li class="">&#128198; ${d}  <span class="text-success mx-3">${getDayFunction(d)}</span></li>`)
             .join("");
           $modalBody.html(`
         <ul class="d-flex flex-column justify-content-center gap-2 fs-5" style="list-style-type:none;">
-          ${list}
+          ${list} 
         </ul>
       `);
         }
@@ -514,8 +563,6 @@ function viewAttendanceTable() {
 }
 
 $(document).ready(() => {
-  $("header").load("../components/header.html");
-  $("nav").load("../components/nav.html");
   $(".table-container").load("../components/takeAttendance.html", function () {
     initAttendanceTable(); // initialize DataTable once DOM is loaded
   });

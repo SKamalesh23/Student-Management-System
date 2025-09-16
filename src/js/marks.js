@@ -1,6 +1,44 @@
-$(document).ready(() => {
-  $("nav").load("../components/nav.html");
-  $("header").load("../components/header.html");
+const nav_path = "../components/nav.html"
+$(".nav-custom").load(nav_path,()=>{
+  const script = document.createElement("script")
+  script.src="../js/nav.js";
+  script.onload = () =>{
+    $('.nav-custom').append("<custom-navbar></custom-navbar>")
+  }
+  document.body.appendChild(script)
+})
+//header  
+const custom = '../components/header.html';
+$("#header").load(custom, () => {
+  const script = document.createElement("script");
+  script.src = "../js/header.js";
+  script.onload = () => {
+    // Now <header-element> is defined
+    $("#header").append("<header-element></header-element>");
+  };
+  document.body.appendChild(script);
+});
+//loader
+const load_path = "../components/loader.html"
+$("#loader").load(load_path,()=>{
+  const script = document.createElement("script")
+  script.src = "../js/loader.js"
+  script.onload = () =>{
+    $("#loader").append("<custom-loader></custom-loader>")
+  }
+  document.body.appendChild(script)
+
+})
+  $(document).ready(function(){
+      $(".add-marks").on("click", function(){
+        $("#contentWrapper").addClass("slide-form");
+      });
+      $(".cancel").on("click", function(){
+        cancelSave()
+        $("#contentWrapper").removeClass("slide-form");
+      });
+    });
+
    function cancelSave(){
     const id = $("#id");
   const quarter = $("#quarter");
@@ -9,7 +47,6 @@ $(document).ready(() => {
   const maths = $("#maths");
   const science = $("#science");
   const social = $("#social");
-
   id.val("");
   id.prop("disabled", false);
   quarter.prop("disabled", false);
@@ -19,10 +56,7 @@ $(document).ready(() => {
   maths.val("");
   science.val("");
   social.val("");
-  $(".err").remove()
-
-
-  $(".save-marks").text("Save Marks");
+$(".save-marks").text("Save Marks");
 }
   const table = $("#table").DataTable({
     sort: false,
@@ -122,52 +156,8 @@ $(document).ready(() => {
     ],
     initComplete: function () {
       $(".search-factors").append(`
-            <div class="d-flex justify-content-end gap-4">
-              <button type="button" class="btn btn-primary" id="add_filter">Add Filters</button>
-              <button type="button" class="btn btn-second" id="summary">Download Report <i class="fa-solid fa-download"></i></button>
-
-            </div>
-            <div id="download_filter" style="display:none">
-              <form class="row">
-                <div class="form-group col-2">
-                    <label class="form-label">Quarter And Year</label>
-                    <select class="form-select" id="qa">
-                      <option value="01/2025">I</option>
-                      <option value="02/2025">II</option>
-                      <option value="03/2025">III</option>
-                    </select>               
-                   </div>
-                <div class="form-group col-2">
-                    <label class="form-label" id="topper">Show Topper</label>
-                    <select class="form-select">
-                      <option value="Y">Yes</option>
-                      <option value="N">No</option>
-                    </select>               
-                   </div>
-                   <div class="form-group col-2">
-                    <label class="form-label">Class</label>
-                    <input class="form-control" id="class" placeholder="Enter Class"/>
-                   </div>
-                      <div class="form-group col-2">
-                    <label class="form-label">Result</label>
-                    <select class="form-select" id="result">
-                      <option value="P">Pass</option>
-                      <option value="F">Fail</option>
-                    </select>               
-                   </div>
-                      <div class="form-group col-2">
-                    <label class="form-label">Complaiance</label>
-                    <select class="form-select" id="compliance">
-                      <option value="T">True</option>
-                      <option value="F">False</option>
-                    </select>               
-                   </div>
-                   <div class="form-group col-2 mt-1">
-                    <button class="btn btn-primary mt-4" type="button" id="download_confirm">Download</button>
-                   </div>
-              </form>
-            </div>
-            <div id="marks_filter" style="display:none">
+           
+            <div id="marks_filter" style="">
                       <form class="d-flex flex-column gap-2">
                       <div class="d-flex gap-2">
                           <div class="form-group">
@@ -271,33 +261,7 @@ $(document).ready(() => {
           isCompliance: getCompliance($("#compliance").val()),
         };
         // alert("jiiii")
-        $.ajax({
-          url: "https://dev-api.humhealth.com/StudentManagementAPI/marks/students/overall/report",
-          type: "POST",
-          contentType: "application/json",
-          data: JSON.stringify(req),
-          xhrFields: {
-            responseType: "blob", // 👈 Important: treat as binary
-          },
-          success: function (data) {
-            // Create a blob from the response
-            const blob = new Blob([data], {
-              type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            });
-
-            // Create temporary link
-            const link = document.createElement("a");
-            link.href = window.URL.createObjectURL(blob);
-            link.download = "marks_report.xlsx"; // 👈 filename
-            link.click();
-
-            // Clean up
-            window.URL.revokeObjectURL(link.href);
-          },
-          error: function (xhr, statusText, error) {
-            console.log("Error rres---->", xhr);
-          },
-        });
+       
       });
       $(document).on("click", "#add_filter", function () {
         // alert("jjjj")
@@ -312,6 +276,7 @@ $(document).ready(() => {
       $("#table").on("click", ".fa-pen-to-square", function () {
         $row = $(this).closest("tr").find("td:first-child");
         const dataId = $row.data("id");
+        $("#contentWrapper").toggleClass("slide-form");
         $.ajax({
           url: `https://dev-api.humhealth.com/StudentManagementAPI/marks/get?id=${dataId}`,
           type: "GET",
@@ -491,9 +456,6 @@ $(document).ready(() => {
     }
    
 cancelSave()
+$("#contentWrapper").toggleClass("slide-form");
   });
-  $('.cancel').on("click",function(){
-  cancelSave()
-})
-});
 

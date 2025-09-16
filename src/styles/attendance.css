@@ -37,3 +37,36 @@ th, td {
 label{
     font-weight: 600;
 }
+.current-page {
+    position: relative;
+}
+
+.current-page::after {
+    content: "";
+    position: absolute;
+    top: -20px;
+    left: -40px;
+    width: 300px; 
+    height: 110px;
+    border-top-left-radius: 2rem;
+    border-top-right-radius: 2rem;
+
+    background-color: rgb(255, 255, 255);
+    border: 1px solid black;
+    border-bottom: 3px solid rgb(255, 255, 255);
+    z-index: -1;
+    /* border-bottom: none; */
+}
+
+
+.table-container::before{
+    z-index: -99;
+    position: absolute;
+    content: "";
+    height: 10px;
+    width: 101%;
+    /* background:black; */
+    border-top: 1px solid black;
+    top: -10px;
+    z-index: -999;
+}

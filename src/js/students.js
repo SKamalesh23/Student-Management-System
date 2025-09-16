@@ -1,3 +1,35 @@
+const custom = '../components/header.html';
+$("#header").load(custom, () => {
+  const script = document.createElement("script");
+  script.src = "../js/header.js";
+  script.onload = () => {
+    // Now <header-element> is defined
+    $("#header").append("<header-element></header-element>");
+  };
+  document.body.appendChild(script);
+});
+//nav
+
+const nav_path = "../components/nav.html"
+$(".nav-custom").load(nav_path,()=>{
+  const script = document.createElement("script")
+  script.src="../js/nav.js";
+  script.onload = () =>{
+    $('.nav-custom').append("<custom-navbar></custom-navbar>")
+  }
+  document.body.appendChild(script)
+})
+//loader Element
+const load_path = "../components/loader.html"
+$("#loader").load(load_path,()=>{
+  const script = document.createElement("script")
+  script.src = "../js/loader.js"
+  script.onload = () =>{
+    $("#loader").append("<custom-loader></custom-loader>")
+  }
+  document.body.appendChild(script)
+
+})
 function verify(input_arr) {
   let ver = true;
 
@@ -125,10 +157,8 @@ function verify(input_arr) {
 
 // }
 let studentId = 0
-let count=0
-$("header").load("../components/header.html");
+
 $(document).ready(() => {
-  $("nav").load("../components/nav.html");
   let update_id = 0;
   const val = $("#active").val();
   const isActive = val ? (val === "A" ? true : false) : null;
@@ -180,7 +210,6 @@ $(document).ready(() => {
           type: "POST",
           contentType: "application/json",
           data: function (d) {
-            count = 0
             const val = $("#active").val();
             const isActive = val ? (val === "A" ? true : false) : null;
             let isHosteller = false;
@@ -221,19 +250,22 @@ $(document).ready(() => {
           {
             title:"S.No",
             data:null,
-            render: function (data, type, row, meta) {
-    return meta.row + meta.settings._iDisplayStart + 1;
+          render: function (data, type, row, meta) {
+    return meta.row + 1 + meta.settings._iDisplayStart;
   }
           },
           {
             title: "Student ID",
-            data: "id",
+            data: null,
+            render:(data)=>{
+              return `<p class="fw-bold text-primary">${data.id}</p>`
+            }
           },
           {
             title: "Student Name",
             data: null,
             render: function (data, type, row) {
-              return `<b class="fw-bold">${data.firstName} ${data.lastName}</b>`;
+              return `<b class="fw-bold ">${data.firstName} ${data.lastName}</b>`;
             },
           },
           {
@@ -304,10 +336,15 @@ $(document).ready(() => {
         </div>
         <div>
           <button type="button" id="search_button" class="btn btn-primary mt-4">
-            Submit
+          Submit</button>
+          <button type="reset" id="" class="btn btn-secondary mt-4">
+            Cancel
           </button>
         </div>
       </form>`);
+      $(document).on("change","input[type='text'],select",()=>{
+        $("#table tbody").hide()
+      })
       $("#table").on("click",".eye",function(){
         const view_id = $(this).data("id");
         console.log(view_id);
@@ -483,6 +520,7 @@ $(document).ready(() => {
             } to ${count_to} of ${count} entries</p>`
           );
           $("#search_button").click(() => {
+            $("#table tbody").show()
             table.ajax.reload();
           });
           $(".pagination .active button").click(() => {
@@ -501,6 +539,7 @@ $(document).ready(() => {
     $("#student_submit_modal").modal("show");
   });
   $("#add_cancel").click(() => {
+    $(".err").remove()
     $("#student_submit_modal").modal("hide");
   });
   $("#add_submit").click(() => {
@@ -542,7 +581,10 @@ $(document).ready(() => {
       console.log(api);
 
       $(".err").remove();
-      if ($("#add_submit") === "Add") {
+      if ($("#add_submit").text() === "Add") {
+
+        console.log("In adddddd");
+        
         $.ajax({
           method: "POST",
           url: "https://dev-api.humhealth.com/StudentManagementAPI/students/save",
@@ -562,7 +604,7 @@ $(document).ready(() => {
               Swal.fire({
                 icon: "success",
                 title: "Generated",
-                text: "✅ " + res.data,
+                text: "✅ " + response.data,
                 showConfirmButton: false,
                 timer: 2000,
               });
@@ -578,6 +620,8 @@ $(document).ready(() => {
           },
         });
       } else {
+        console.log("In updateeeeeeeeeeeee");
+        
         const update_details = {
           id: update_id,
           ...details,
@@ -629,12 +673,16 @@ $(document).ready(() => {
     }
   });
 });
-$(".exam-score").click(()=>{
-  // alert("jjj")
-      $(".score-panel").slideToggle()
+$(".exam-score").click(() => {
+  $(".score-panel").slideToggle(500, () => {
+    // After slideToggle animation is finished
+    $(".modal-body").animate(
+      { scrollTop: $(".modal-dialog").scrollTop() + 250 },
+    );
+  });
+});
 
- 
-})
+
 function apiCall() {}
 function check() {}
 $("#ok").on("click", function () {
