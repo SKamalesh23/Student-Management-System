@@ -77,3 +77,7 @@ form h3{
     width: 350px;
     background: #999a99;
 }
+
+.modal-body::-webkit-scrollbar{
+    display: none
+}

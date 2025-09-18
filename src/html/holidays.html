@@ -32,7 +32,16 @@
     <script src="https://cdn.datatables.net/2.3.3/js/dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/2.3.3/js/dataTables.bootstrap5.min.js"></script>
 
-    <title>Document</title>
+    <!-- Datepicker -->
+      <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <!-- <script src="https://code.jquery.com/jquery-3.7.1.js"></script> -->
+  <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
+
+
+    <link rel="shortcut icon" href="../../public/assets/brand-logo-favicon.png" type="image/x-icon">
+
+    <title>Edu School</title>
   </head>
   <body>
     <nav class="nav-custom"></nav>
@@ -72,17 +81,17 @@
               </div>
               <div class="modal-body">
                 
-                <form class="gap-5 pt-4 holiday-form">
+                <form class="gap-5 pt-4 holiday-form" autocomplete="off">
                   <div class="form-group">
                     <label for="" class="form-label">Enter Date</label>
-                    <input type="date" class="form-control e-date" />
+                    <input type="text" class="form-control e-date datepicker" id="datepicker" />
                   </div>
                   <div class="form-group">
                     <label for="" class="form-label">Enter Reason</label>
                     <input type="text" class="form-control e-reason" />
                   </div>
                   <div class="form-group">
-                        <button type="button" class="btn" id="remove_holiday">
+                        <button type="button" disabled class="btn" id="remove_holiday">
                       <i
                         class="fa-solid fa-trash text-secondary"
                         role="button"

@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="shortcut icon" href="../../public/assets/brand-logo-favicon.png" type="image/x-icon">
+
+    <title>Edu School</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="../styles/nav.css">
     <link rel="stylesheet" href="../styles/attendance.css">
@@ -37,6 +39,11 @@
   <script src="https://cdn.datatables.net/2.3.3/js/dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/2.3.3/js/dataTables.bootstrap5.min.js"></script>
 
+  <!-- DatePicker -->
+   <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
+
 
 </head>
 <body>
@@ -53,6 +60,7 @@
       <div id="calendar" class="d-flex justify-content-around p-4">
           <div class="fs-3 text-shadow text-primary current-page rounded p-2 take-attendance">Take Attendance</div>
           <div class="fs-3 text-shadow text-secondary rounded p-2 view-attendance">View Attendance</div>
+          <div class="fs-3 text-shadow text-secondary rounded p-2 px-0 view-absent">Absent Percentage</div>
       </div>
       <div class="table-container mt-3">
           

@@ -30,9 +30,17 @@ th, td {
 }
 .take-attendance:hover{
     cursor: pointer;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+
 }
 .view-attendance:hover{
     cursor: pointer;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+}
+.view-absent:hover{
+    cursor: pointer;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+
 }
 label{
     font-weight: 600;

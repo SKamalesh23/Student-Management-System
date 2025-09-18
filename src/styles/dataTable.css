@@ -5,17 +5,17 @@
   initial-value: #264653;
 }
 
-thead{
+#table thead{
     text-align: center;
     background-color: rgb(246, 212, 73) !important;
     color: #525252;
 }
-th{
+#table th{
     font-size: 14px;
     font-weight: 700 !important;
     padding: 1.2rem !important;
 }
-tbody{
+#table tbody{
     border-top:0.3px solid #fff !important ;
 }
 .btn-second{

@@ -9,7 +9,7 @@ $("#header").load(custom, () => {
   document.body.appendChild(script);
 });
 //nav
-
+$("#phoneNo").inputmask("999-9999-999")
 const nav_path = "../components/nav.html"
 $(".nav-custom").load(nav_path,()=>{
   const script = document.createElement("script")
@@ -124,6 +124,10 @@ function verify(input_arr) {
   return ver;
 }
 
+$("#student_submit_modal").on("input change","input,select",function(){
+  console.log($(this).closest(".form-group").find(".err").remove())
+})
+
 // function filteredTable(search_by,search_value,noe,active){
 //     console.log(search_by,search_value,noe,active);
 //     $.ajax({
@@ -159,6 +163,9 @@ function verify(input_arr) {
 let studentId = 0
 
 $(document).ready(() => {
+  $("#dob").datepicker({
+      dateFormat: "yy-mm-dd",
+  })
   let update_id = 0;
   const val = $("#active").val();
   const isActive = val ? (val === "A" ? true : false) : null;
@@ -243,15 +250,18 @@ $(document).ready(() => {
 
             return JSON.stringify(filter);
           },
-          dataSrc: "data", // tell DataTables to use response.data
+          dataSrc: "data", // tell DataTables to use response.data,
+          error:function(xhr,statusText,error){
+            alert("hiii")
+          }
         },
-        dom: '<"dt-header d-flex flex-column justify-content-between w-100" <"d-flex justify-content-between px-5 w-100"<"search-factors dt-search d-flex justify-content-between mx-3 w-100" >>>rt<"d-flex justify-content-between"<i>p>',
+        dom: '<"dt-header d-flex flex-column justify-content-between w-100" <"d-flex justify-content-between px-5 w-100"<"search-factors dt-search d-flex justify-content-between  w-100" >>>rt<"d-flex justify-content-between"<i>p>',
         columns: [
           {
             title:"S.No",
             data:null,
           render: function (data, type, row, meta) {
-    return meta.row + 1 + meta.settings._iDisplayStart;
+    return meta.row + 1;
   }
           },
           {
@@ -284,7 +294,7 @@ $(document).ready(() => {
               if (resident == "A") {
                 return `<div class=" d-flex justify-content-center"><div class="bg-sm  text-success  w-25 active-student" id="active"  data-id="${data.id}" style="background-color:#DCFCE7;border-radius:20px" role="button">Active</div></div>`;
               } else {
-                return `<div class=" d-flex justify-content-center"><div class="bg-sm  text-danger  w-25 active-student" id="inactive" data-id="${data.id}" style="background-color:#FEE2E2;border-radius:20px" role="button">Inactive</div></div>`;
+                return `<div class=" d-flex justify-content-center "><div class="bg-sm  text-danger  w-50 active-student"  id="inactive" data-id="${data.id}" style="background-color:#FEE2E2;border-radius:20px" role="button">Inactive</div></div>`;
               }
             },
           },
@@ -342,8 +352,9 @@ $(document).ready(() => {
           </button>
         </div>
       </form>`);
-      $(document).on("change","input[type='text'],select",()=>{
-        $("#table tbody").hide()
+      $(".search-factors").on("change","input[type='text'],select",()=>{
+        $("#table tbody").hide()("#table").next().hide()
+
       })
       $("#table").on("click",".eye",function(){
         const view_id = $(this).data("id");
@@ -390,7 +401,7 @@ $(document).ready(() => {
                           <input
                             type="text"
                             class="form-control"
-                            value="${data.tamil}"
+                            value="${data.tamil || "Not Entered"}"
                             disabled
                           />
                         </div>
@@ -399,7 +410,7 @@ $(document).ready(() => {
                           <input
                             type="text"
                             class="form-control"
-                            value="${data.english}"
+                            value="${data.english || "Not Entered"}"
                             disabled
                           />
                         </div>
@@ -410,7 +421,7 @@ $(document).ready(() => {
                           <input
                             type="text"
                             class="form-control"
-                            value="${data.maths}"
+                            value="${data.maths || "Not Entered"}"
                             disabled
                           />
                         </div>
@@ -419,7 +430,7 @@ $(document).ready(() => {
                           <input
                             type="text"
                             class="form-control"
-                            value="${data.science}"
+                            value="${data.science || "Not Entered"}"
                             disabled
                           />
                         </div>
@@ -429,11 +440,11 @@ $(document).ready(() => {
                         <input
                           type="text"
                           class="form-control"
-                          value="${data.socialScience}"
+                          value="${data.socialScience || "Not Entered"}"
                           disabled
                         />
                       </div>
-                      <h4 class="fw-bold text-center mt-4">Total Marks : <span class="text-success">${data.total}</span></h4>
+                      <h4 class="fw-bold text-center mt-4">Total Marks : <span class="text-success">${data.total || "Not Entered"}</span></h4>
                     </form>`
       )
       
@@ -442,6 +453,8 @@ $(document).ready(() => {
         $("#view_student_modal").modal("show")
       })
           $("#table").on("click", ".fa-pen-to-square", function () {
+    $(".err").remove();
+
             update_id = $(this).data("id");
             $.ajax({
               method: "GET",
@@ -536,6 +549,10 @@ $(document).ready(() => {
   });
 
   $("#add_student").click(() => {
+    // alert("kkk")
+    $(".err").remove();
+
+    $("#add_submit").text("Add")
     $("#student_submit_modal").modal("show");
   });
   $("#add_cancel").click(() => {
@@ -550,9 +567,9 @@ $(document).ready(() => {
       if (parts.length !== 3) return dateStr;
       return `${parts[1]}-${parts[2]}-${parts[0]}`;
     }
-    const rawDob = $("#dob").val(); // "2010-05-05" from input
-    const dob = formatDateToDDMMYYYY(rawDob); // "05-05-2010"
-
+    const rawDob = $("#dob").val(); 
+    const dob = formatDateToDDMMYYYY(rawDob); 
+ 
     const details = {
       firstName: $("#firstName").val(),
       middleName: $("#middleName").val(),
@@ -561,7 +578,7 @@ $(document).ready(() => {
       dob: formatDateToDDMMYYYY($("#dob").val()), // "23-01-2001"
       studentClass: parseInt($("#studentClass").val(), 10),
       residingStatus: $("#residingStatus").val(),
-      phoneNo: $("#phoneNo").val(),
+      phoneNo: $("#phoneNo").val().replace(/\D/g,""),
       emergencyContactPersonName: $("#emergencyContactPersonName").val(),
       emergencyContactPhoneNumber: $("#emergencyContactPhoneNumber").val(),
       streetName: $("#streetName").val(),
@@ -581,7 +598,7 @@ $(document).ready(() => {
       console.log(api);
 
       $(".err").remove();
-      if ($("#add_submit").text() === "Add") {
+      if ($("#add_submit").text().trim() === "Add") {
 
         console.log("In adddddd");
         
@@ -616,7 +633,7 @@ $(document).ready(() => {
           },
           error: function (err) {
             console.log("Error status : ", err);
-            alert("error occured see log");
+            
           },
         });
       } else {
@@ -654,6 +671,7 @@ $(document).ready(() => {
                 '<span class="text-danger err">Email already Exists</span>'
               );
             }
+
           },
           error: function (xhr, status, error) {
             console.log("Error status:", error);
@@ -691,6 +709,13 @@ $("#ok").on("click", function () {
     <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
     Processing...
   `);
+$("#reset").click(() => {
+  // $("#student_submit_modal").modal("hide");
+
+  // const form = $("#student_submit_modal form")[0]; 
+  // form.reset(); // resets all fields
+});
+
 
   // simulate async action (AJAX)
   setTimeout(() => {
@@ -699,3 +724,9 @@ $("#ok").on("click", function () {
     $("#student_status").modal("hide");
   }, 2000);
 });
+$(document).on("click","#reset_modal",function(){
+   $("#student_submit_modal").modal("hide");
+
+  const form = $("#student_submit_modal form")[0]; 
+  form.reset(); // resets all fields
+})

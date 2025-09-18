@@ -1,3 +1,18 @@
+ function getValidUser(user,pass){
+    const raw =  localStorage.getItem("credentials")
+    const data = raw? JSON.parse(raw):[]
+    for(let [x,y] of Object.entries(data)){
+            if(y.user === user && y.pw === pass){
+                    console.log(y.pw,y.user);
+                
+                return true
+            }
+                
+            
+    }
+    return false
+
+}
 $(document).ready(()=>{
     $('button').click((event)=>{
         const user = $('#username').val()
@@ -26,9 +41,33 @@ $(document).ready(()=>{
         if(user && pass && user_regex && pass_regex){
         $(".span").text("")
         $(".modal").show()
-        setTimeout(()=>{
+        const array = [
+            {
+                user:"kamalesh",
+                pw:"Humworld@1"
+            },
+            {
+                user:"albertkumar",
+                pw:"Humw0rld"
+            },
+            {
+                user:"uservalid",
+                pw:"pass@1234"
+            }
+        ]
+        // localStorage.setItem("credentials",JSON.stringify(array))
+        const validUser = getValidUser(user,pass)
+        if (validUser) {
+            setTimeout(()=>{
+            localStorage.setItem("log","signed")
             window.location.href="dashboard.html"
         },1000)
+        } else {
+            $(".inv").after("<h6 class=' text-center span text-danger'>Invalid User Credentails</h6>")
+
+            
+        }
+        
 
             
         }
@@ -38,15 +77,16 @@ $(document).ready(()=>{
     })
 })
 
-$(document).on("click",".eye",()=>{
-    const input = $("#password");
+$(document).on("click",".eye",function(){
+  let input = $("#password");
+  let icon = $(this).children("i"); // get the <i> inside span
 
-    if (input.attr("type") === "password") {
-      input.attr("type", "text"); // show password
-      $(this).removeClass("fa-eye").addClass("fa-eye-slash");
-    } else {
-      input.attr("type", "password"); // hide password
-      $(this).removeClass("fa-eye-slash").addClass("fa-eye");
-    }
+  if (input.attr("type") === "password") {
+    input.attr("type", "text");               // show password
+    icon.removeClass("fa-eye").addClass("fa-eye-slash");
+  } else {
+    input.attr("type", "password");           // hide password
+    icon.removeClass("fa-eye-slash").addClass("fa-eye");
+  }
+});
 
-})

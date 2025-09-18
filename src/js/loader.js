@@ -15,6 +15,13 @@ class Loader extends HTMLElement{
         setTimeout(() => (el.style.display = "none"), 100);
       }, 1000);
     });
+     $('#table').on('preXhr.dt', function () {
+      setTimeout(() => {
+        const el = document.getElementById("loading-screen");
+        el.style.opacity = "0";
+        setTimeout(() => (el.style.display = "none"), 100);
+      }, 1000);
+  });
     }
 }
 customElements.define("custom-loader",Loader)

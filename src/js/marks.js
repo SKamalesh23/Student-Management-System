@@ -99,6 +99,13 @@ $(".save-marks").text("Save Marks");
     },
     dom: "<dt-header<'search-factors '><'float-end pt-2'p>t<'d-flex justify-content-between' i p>>",
     columns: [
+        {
+            title:"S.No",
+            data:null,
+          render: function (data, type, row, meta) {
+    return meta.row + 1 + meta.settings._iDisplayStart;
+  }
+          },
       {
         title: "ID",
         data: "studentId",
@@ -210,9 +217,9 @@ $(".save-marks").text("Save Marks");
                           </div>
                         </div>
                           <div class="col-2">
-                            <div class="form-group">
-                            <label class="form-label">Sort<label>
-                              <select class="form-select" id="asc">
+                            <div class="form-group p-0 m-0">
+                            <label class="form-label p-0 m-0">Sort</label>
+                              <select class="form-select mt-0" id="asc">
                                 <option value="asc">Ascending</option>
                                 <option value="desc">Descending</option>
                               </select>
@@ -245,7 +252,11 @@ $(".save-marks").text("Save Marks");
           `);
       $(document).on("click", "#filter_submit", function () {
         table.ajax.reload();
+        $("#table tbody").show()
       });
+      $(".search-factors").on("change","input[type],select",()=>{
+        $("#table tbody").hide()
+      })
       $(document).on("click", "#download_confirm", function () {
         function getCompliance(c) {
           if (c === "T") {

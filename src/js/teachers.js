@@ -120,11 +120,12 @@ function showMod() {
       }),
       contentType: "application/json",
       success: function (response) {
-        $("#teacher_modal").modal("hide");
 
         console.log("success response", response);
         // const res = JSON.parse(response)
         if (response.status === "success") {
+        $("#teacher_modal").modal("hide");
+
           $("#teacher_submit_modal").show();
           $("#table").DataTable().ajax.reload();
 
@@ -135,6 +136,15 @@ function showMod() {
             $("#subject").val("");
             console.log(name);
           }, 2000);
+        }
+        else{
+          if(response.status=="failure" && response.data[0].startsWith("email")){
+              // alert("not email")
+              if($(".err-email").length==0){
+              $("#mail").after(`<span class="text-danger mail err-email">Email already Exists</span>`)
+
+              }
+          }
         }
       },
       error: function (xhr, status, error) {

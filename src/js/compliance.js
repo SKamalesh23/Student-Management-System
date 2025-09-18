@@ -61,6 +61,13 @@ const Complian = function(){
     dom: "<dt-header<'search-factors '><'float-end pt-2'p>t<'d-flex justify-content-between' i p>>",
     columns:[
         {
+            title:"S.No",
+            data:null,
+          render: function (data, type, row, meta) {
+    return meta.row + 1 ;
+  }
+          },
+        {
             title:"Name",
             data:'studentName'
         },

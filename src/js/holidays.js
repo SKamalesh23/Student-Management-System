@@ -1,3 +1,12 @@
+function clearDateFunction(){
+    $(".e-date").val("")
+          $(".e-reason").val("")
+          $(".save-h").remove()
+          $("#add_holiday").prop("disabled",false)
+          $(".e-date").attr("data-id",holidayId)
+          $("#save_button").text("Save Holiday")
+          $("#add_holiday_modal").modal("hide")
+}
 const nav_path = "../components/nav.html"
 $(".nav-custom").load(nav_path,()=>{
   const script = document.createElement("script")
@@ -22,14 +31,18 @@ $("#header").load(custom, () => {
   const script = document.createElement("script");
   script.src = "../js/header.js";
   script.onload = () => {
-    // Now <header-element> is defined
     $("#header").append("<header-element></header-element>");
   };
   document.body.appendChild(script);
 });
 
 $(document).ready(() => {
+$(".datepicker").datepicker({
+  dateFormat: "yy-mm-dd",
+  appendTo: "#add_holiday_modal" 
+});
   $("#save_holiday").click(() => {
+    $("#save_button").text("Save Holiday")
     $("#add_holiday_modal").modal("show")
   });
   $(document).on("click", "#add_holiday", function () {
@@ -37,7 +50,7 @@ $(document).ready(() => {
 
             <div class="form-group">
                 <label for="" class="form-label">Enter Date</label>
-                <input type="date" class="form-control e-date">
+                <input type="text" class="form-control e-date date" id="datepicker">
             </div>
             <div class="form-group">
                 <label for="" class="form-label">Enter Reason</label>
@@ -49,6 +62,10 @@ $(document).ready(() => {
 
            
         </form>`);
+       $(".datepicker").datepicker({
+  dateFormat: "yy-mm-dd",
+  appendTo: "#add_holiday_modal" // 👈 attach inside modal
+});
   });
 });
 $(document).on("click", "#remove_holiday", function () {
@@ -145,12 +162,7 @@ $(document).on("click", "#save_button", function () {
         dates[x].value = "";
         reasons[x].value = "";
       }
-         $(".e-date").val("")
-          $(".e-reason").val("")
-          $("#add_holiday").prop("disabled",false)
-          $(".e-date").attr("data-id",holidayId)
-          $("#save_button").text("Save Holiday")
-          $("#add_holiday_modal").modal("hide")
+       clearDateFunction()
 
     }
     else{
@@ -179,12 +191,25 @@ $(document).on("click", "#save_button", function () {
   }
   
 });
-$("#cancel_button").click(()=>{
-    const res_arr = []
-    const dates = document.querySelectorAll('.e-date')
-    const reason1 = document.querySelector(".e-reason").value
-    for(let x = 0;x<dates.length;x++){
-        res_arr.push(dates[x].value)
+$("#cancel_button").click(() => {
+  const res_arr = [];
+  const dates = document.querySelectorAll('.e-date');
+  const reason1 = document.querySelector(".e-reason").value;
+
+  dates.forEach(input => {
+    if (input.value.trim() !== "") {   // check value, not element
+      res_arr.push(input.value);
+    }
+  });
+
+  console.log(res_arr);
+    if(res_arr.length===0){
+      if($(".err").length===0 ){
+           $(".e-date").after(`
+          <span class="text-danger err">Enter Date</span>
+        `)
+      }
+        return
     }
     $.ajax({
         method:"POST",
@@ -200,7 +225,12 @@ $("#cancel_button").click(()=>{
         showConfirmButton: false,
         timer: 2000,
       });
-      table.ajax.reload()
+        $("#add_holiday_modal").modal("hide")
+        $(".err").remove()
+        table.ajax.reload()
+        },
+        error:function(xhr,statusText,error){
+
         }
     })
     
@@ -228,8 +258,9 @@ $("#add_holiday_modal").on("click",".btn-close",function(){
 // let month = $("#month").val() || 9
 // console.log("year->",year);
 function getHolidayUrl() {
-  let isCancelled = $("#cancelled").val();
-  isCancelled = isCancelled === "" ? "" : isCancelled === "true";
+  let isCancelled = $("#cancelled");
+  // isCancelled = isCancelled === "" ? isCancelled : isCancelled === "";
+  isCancelled = isCancelled.length? isCancelled.val() : ""
  let month = $("#month").val() ? $("#month").val() : new Date().getMonth()+1;
 let year  = $("#year").val()  ? $("#year").val()  : new Date().getFullYear();
 
@@ -256,8 +287,15 @@ const table = $("#table").DataTable({
       console.log("XHR Error:", xhr);
     },
   },
-  dom: '<"dt-header d-flex justify-content-between"<"search-factor w-100">>t<"d-flex justify-content-between"ip>',
+  dom: '<"dt-header d-flex justify-content-between"<"search-factor w-100 ">>< "d-flex w-100 justify-content-end" p>t<"d-flex justify-content-between"ip>',
   columns: [
+      {
+            title:"S.No",
+            data:null,
+          render: function (data, type, row, meta) {
+    return meta.row + 1;
+  }
+          },
     { data: "holidayId", title: "Id" },
     { data: "holidayDate", title: "Date" },
     { data: "holidayReason", title: "Reason" },

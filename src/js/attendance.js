@@ -37,6 +37,9 @@ $(".view-attendance").click(() => {
   $(".take-attendance")
     .addClass("text-secondary")
     .removeClass("text-primary current-page");
+  $(".view-absent")
+    .addClass("text-seondary")
+    .removeClass("text-primary current-page")
   $(".table-container").load("../components/viewAttendance.html", function () {
     //  if ($.fn.DataTable.isDataTable("#table")) {
     //   $("#table").DataTable().clear().destroy();
@@ -53,6 +56,9 @@ $(".take-attendance").click(() => {
   $(".view-attendance")
     .addClass("text-secondary")
     .removeClass("text-primary current-page");
+  $(".view-absent")
+    .addClass("text-seondary")
+    .removeClass("text-primary current-page")
   $(".table-container").load("../components/takeAttendance.html", function () {
     // destroy if exists
     if ($.fn.DataTable.isDataTable("#table")) {
@@ -63,41 +69,187 @@ $(".take-attendance").click(() => {
     initAttendanceTable();
   });
 });
+
+$(".view-absent").click(()=>{
+  $(".view-absent")
+    .addClass("text-primary current-page")
+    .removeClass("text-secondary")
+  $(".view-attendance")
+    .addClass("text-secondary")
+    .removeClass("text-primary current-page");
+    $(".take-attendance")
+    .addClass("text-secondary")
+    .removeClass("text-primary current-page");
+     $(".table-container").load("../components/takeAttendance.html", function () {
+    // destroy if exists
+    if ($.fn.DataTable.isDataTable("#table")) {
+      $("#table").DataTable().clear().destroy();
+    }
+
+    // now init DataTable fresh
+    absentTable();
+  });
+    
+})
+  function getMonth(m) {
+  const ar = m.split('-');       // ["2025", "09"]
+  return parseInt(ar[1], 10);    // 9
+}
+function getYear(m){
+  const ar = m.split('-');       // ["2025", "09"]
+  return parseInt(ar[0], 10); 
+}
+function absentTable() {
+  let month =$("#month").length ? getMonth($("#month").val()) : 9
+  let year = $("#month").length ? getYear($("#month").val()) : new Date().getFullYear()
+  let percent = $("#absent_percent").length ? $("#absent_percent").val() : 50
+  $("#loading-screen").css("opacity","1")
+  $("#loading-screen").show()
+  $("#loading-screen").addClass("d-flex justify-content-center ")
+  const table = $('#table').DataTable({
+    processing: true,
+    sort: false,
+    ajax: {
+      url: `https://dev-api.humhealth.com/StudentManagementAPI/dailyattendance/absent/percentage`,
+      type: "GET",
+      dataType: "json",
+      data: function () {
+      return {
+        month: $("#month").val() ? getMonth($("#month").val()) : 9,
+        year: $("#month").val() ? getYear($("#month").val()) : new Date().getFullYear(),
+        absentPercent: $("#absent_percent").val() || 50
+      };
+    },
+      dataSrc:function (json) {
+        // remove duplicates by studentId
+        console.log(json);
+        
+        const unique = [];
+        const seen = new Set();
+
+        json.data.forEach(row => {
+          if (!seen.has(row.studentId)) {
+            seen.add(row.studentId);
+            unique.push(row);
+          }
+        });
+
+        return unique; // return cleaned data
+      }
+    },
+    dom: "<dt-header <'search-factors p-2 d-flex justify-content-end'>t<'d-flex justify-content-between'<i><p>>>",
+    columns: [
+        {
+            title:"S.No",
+            data:null,
+          render: function (data, type, row, meta) {
+    return meta.row + 1;
+  }
+          },
+
+      { data: "studentId", title: "ID" },
+      { data: "studentFirstName", title: "First Name" },
+      { data: "studentClass", title: "Class" },
+      { data: "studentEmail", title: "Email" }
+    ],
+    initComplete:function(){
+        $("#loading-screen").css("opacity","0")
+  $("#loading-screen").hide()
+  $("#loading-screen").removeClass("d-flex justify-content-center ")
+      $(".search-factors").html(`
+        <form class="d-flex gap-5">
+              <div class="form-group">
+                  <label class="form-label">Month</label>
+                  <input type="month" id="month" class="form-control" />
+              </div>
+              <div class="form-group">
+                  <label class="form-label">Percentage</label>
+                  <select class="form-select" id="absent_percent">
+                    <option value="25">25%</option>
+                    <option value="50">50%</option>
+                    <option value="75">75%</option>
+                    <option value="90">90%</option>
+                  </select>
+              </div>
+              <div class="form-group">
+               <label class="form-label mt-5"></label>
+              <button type="button" class="btn btn-primary absent-submit ">Submit</button>
+              </div>
+
+             
+        </form>
+        `)
+        $(".search-factors").on("click",".absent-submit",()=>{
+
+          table.ajax.reload()
+        })
+    }
+  });
+
+  // Loader show/hide
+  $('#table').on('preXhr.dt', function () {
+    $("#loadingScreen").show();
+  });
+
+  $('#table').on('xhr.dt', function () {
+    $("#loadingScreen").hide();
+  });
+}
 function initAttendanceTable() {
   const table = $(".table-container #table").DataTable({
     processing: true,
     serverSide: true,
     sort: false,
     ajax: {
-      url: "https://dev-api.humhealth.com/StudentManagementAPI/students/list",
+      url: "https://dev-api.humhealth.com/StudentManagementAPI/dailyattendance/list",
       type: "POST",
       contentType: "application/json",
       dataType: "json",
       data: function (d) {
         // Merge DataTables params with your custom filters
+        console.log(JSON.stringify({
+            tookAttendance: "N",
+            today: "Y",
+            customDate: "",
+            month: null,
+            sickLeaveFlag: null,
+            ecaFlag: null
+        }));
+        
         return JSON.stringify({
-          isActive: true,
-          isHosteller: false,
-          isDayScholar: false,
-          searchBy: "",
-          searchValue: "",
-          start: 0,
-          length: 50,
+            tookAttendance: "N",
+            today: "Y",
+            customDate: "",
+            month: null,
+            sickLeaveFlag: null,
+            ecaFlag: null
         });
       },
+       dataSrc: function(json){
+      console.log("___.",json);
+      return json.data["01/2025"]
+      
     },
-    dataSrc: "data",
+    },
+   
     dom: "<dt-header<'d-flex justify-content-end w-100'<'sub mt-1 w-100 d-flex justify-content-end'> >>",
     columns: [
+        {
+            title:"S.No",
+            data:null,
+          render: function (data, type, row, meta) {
+    return meta.row + 1 ;
+  }
+          },
       {
         title: "ID",
-        data: "id",
+        data: "studentId",
       },
       {
         title: "Name",
         data: null,
         render: function (data) {
-          return `<b class="fw-bold">${data.firstName} ${data.lastName}</b>`;
+          return `<b class="fw-bold">${data.studentFirstName} ${data.studentLastName}</b>`;
         },
       },
       {
@@ -308,6 +460,25 @@ function initAttendanceTable() {
   });
 }
 function viewAttendanceTable() {
+   function getsearchDate(){
+  let today = $("#today").length ? $("#today").is(":checked") : true;
+  let custom_date = $("#attendanceDate").length?$("#attendanceDate").val():null
+  const d = new Date()
+            if(today || custom_date ==""){
+              const date = d.getDate()
+              const month = String(d.getMonth()+1).padStart(2,"0")
+              const year = d.getFullYear()
+              console.log(`today ----> ${year}-${month}-${date}`)
+               return `${year}-${month}-${date}`
+              
+            }
+            else{
+              console.log("custom---------",custom_date);
+              
+                return custom_date
+            }
+
+          }
   if ($.fn.DataTable.isDataTable("#table")) {
     $("#table").DataTable().clear().destroy();
   }
@@ -334,7 +505,7 @@ function viewAttendanceTable() {
     c_date = null;
 
   } else {
-    today = "N"
+    today = null
     month = $("#month").length ? $("#month").val() : null;
     c_date = $("#attendanceDate").length ? $("#attendanceDate").val() : null;
     if(c_date){
@@ -345,14 +516,7 @@ function viewAttendanceTable() {
 
   let sickLeave = $("#sick").length ? ($("#sick").is(":checked") ? "Y"  : null) : null;
   let eca = $("#eca").length ? ($("#eca").is(":checked") ? "Y" : null) : null;
-  function getMonth(m){
-    const ar = m.split('-')
-    let month = ar[1]
-    if(parseInt(month)<10){
-      return parseInt(month[1])
-    }
-    return parseInt(month)
-  }
+
   const payload = {
     tookAttendance: attend,
     today: today,
@@ -372,16 +536,61 @@ function viewAttendanceTable() {
         if (keys.length === 0) return [];
 
         // flatten response, keep absentDates for later use
-        return json.data[$("#quarter").length?$("#quarter").val():"01/2025"].map((r) => ({
+        const qt =  json.data[$("#quarter").length?$("#quarter").val():"01/2025"]?.map((r) => ({
           ...r,
           absentDates: r.absentDates || [],
         }));
+        const seen = new Set()
+        const presentStudents = []
+        const absentStudents = []
+        qt?.forEach(item =>{
+          if(item.absentDates.includes(getsearchDate())){
+              absentStudents.push(item)
+          }
+          else{
+            presentStudents.push(item)
+          }
+        })
+        if(!$("#present").length || $("#present").val()==""){
+          console.log("All students : ",qt);
+          
+          return qt
+        }
+        else if($("#present")?.val()=="Y"){
+          console.log("Present students : ",presentStudents);
+          
+          return presentStudents
+        }
+        else{
+          console.log("absent Studenys : ",absentStudents);
+          
+          return absentStudents
+        }
       },
     },
     dom: "<dt-header <'search-factors'>t<'d-flex justify-content-between'<i><p>>>",
     columns: [
+        {
+            title:"S.No",
+            data:null,
+          render: function (data, type, row, meta) {
+    return meta.row + 1;
+  }
+          },
       { data: "studentId", title: "ID" },
       { data: "studentFirstName", title: "First Name" },
+      {title:"Status",data:null,
+        render:(data)=>{
+         if($("#stat")?.val()==="N"){
+            return `<span class="bg-warning text-white rounded p-1">Not Taken</span>`
+
+         }
+          if(!data.absentDates.includes(getsearchDate())){
+            return `<span class=" text-success  p-1" style="background-color:#DCFCE7;border-radius:20px"> Present</span>`
+          }
+          return `<span class=" text-danger p-1" style="background-color:#FEE2E2;border-radius:20px">Absent</span>`
+        }
+      },
       { data: "studentClass", title: "Class" },
       { data: "studentEmail", title: "Email" },
       {
@@ -401,10 +610,11 @@ function viewAttendanceTable() {
     initComplete: function () {
       console.log("Attendance table loaded ✅");
       $(".search-factors").append(`
-      <div class=" d-flex justify-content-center mb-1">
-      <div class="fill">
-      <form class="d-flex gap-5 align-items-center fill-form" >
-      <div class="form-group">
+      <div class=" d-flex justify-content-start mb-1">
+      <div class="fill w-100">
+      <form class=" align-items-center fill-form" >
+      <div class="row">
+      <div class="col-2 form-group">
           <label class="form-label">Quarter</label>
           <select name="" id="quarter" class="form-select">
             <option value="01/2025">I</option>
@@ -412,39 +622,55 @@ function viewAttendanceTable() {
             <option value="03/2025">III</option>
           </select>
       </div>
-        <div class="form-group">
+        <div class="col-2 form-group">
           <label class="form-label">Attendance</label>
           <select name="" id="stat" class="form-select">
-            <option value="P">Present</option>
-            <option value="A">Absent</option>
+            <option value="Y">Taken</option>
+            <option value="N">Not Taken</option>
           </select>
         </div>
-        <div class="form-group mt-5">
+        <div class="col-2 form-group">
+          <label class="form-label">Status</label>
+          <select name="" id="present" class="form-select">
+            <option value="">All</option>
+            <option value="Y">Present</option>
+            <option value="N">Absent</option>
+          </select>
+        </div>
+        <div class=" col-1 form-group mt-5">
           <input type="checkbox" class="form-check-input" id="today"/>
           <label class="form-label" for="today">Today</label>
         </div>
-   <div class="form-group">
+   <div class=" col-2 form-group">
   <label for="attendanceDate" class="form-label">Date</label>
-  <input type="date" class="form-control" id="attendanceDate" name="attendanceDate">
+  <input type="text" class="form-control" id="attendanceDate" name="attendanceDate">
 </div>
-<div class="form-group">
+<div class="col-2 form-group">
   <label for="month" class="form-label">Select Month</label>
   <input type="month" id="month" class="form-control">
 </div>
-<div class="form-group mt-5">
+</div>
+<div class="row">
+<div class="col-2 form-group mt-5">
           <input type="checkbox" class="form-check-input" id="sick"/>
           <label class="form-label">Sick Leave</label>
 </div>
-<div class="form-group mt-5">
+<div class=" col-8 form-group mt-5">
           <input type="checkbox" class="form-check-input" id="eca" />
           <label class="form-label">Extra Curricular Activities</label>
 </div>
-<div class="form-group mt-5"><button type="button" class="btn btn-primary border-none sub">Submit</button></div>
-<div class="form-group mt-5"><button type="reset" class="btn btn-secondary border-none reset">Cancel</button></div>
-
+<div class="col-1 form-group mt-5"><button type="button" class="btn btn-primary border-none w-100 sub">Submit</button></div>
+<div class="col-1 form-group mt-5"><button type="reset" class="btn btn-secondary border-none w-100 reset">Cancel</button></div>
+</div>
       </form>
       </div>
     `);
+    $("#attendanceDate").datepicker({
+      dateFormat: "yy-mm-dd",
+      yearRange: "1990:2025",
+      changeMonth:true,
+      changeYear:true
+    })
     $(".search-factors").on("change","input,select",()=>{
       
     $("#table tbody,tfoot").hide()

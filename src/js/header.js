@@ -11,10 +11,25 @@ class Header extends HTMLElement{
     this.showNavbarFunction()
     this.searchByName()
     this.logOutFunction()
+    this.checkUser()
+    this.getCurrentPage()
+  }
+  async checkUser(){
+    const log = localStorage.getItem("log");
+    if(!log){
+
+          window.location.replace('../html/login.html');
+
+    }
+  }
+  getCurrentPage(){
+    const currentPath = window.location.pathname.split('/').pop().replace('.html', '');
+    $(".header-title").text(currentPath.charAt().toUpperCase()+currentPath.slice(1))
   }
   logOutFunction(){
     $(".log-out").click(()=>{
-    location.href="../html/login.html";
+      localStorage.removeItem("log")
+          window.location.replace('../html/login.html');
 
     })
   }
