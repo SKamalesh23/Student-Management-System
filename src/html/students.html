@@ -14,6 +14,15 @@
     <link rel="stylesheet" href="../styles/fonts.css" />
     <link rel="stylesheet" href="../styles/dataTable.css" />
     <link rel="stylesheet" href="../styles/nav.css" />
+    <!-- Seraialize Json -->
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/3.2.1/jquery.serializejson.min.js" 
+        integrity="sha512-SdWDXwOhhVS/wWMRlwz3wZu3O5e4lm2/vKK3oD0E5slvGFg/swCYyZmts7+6si8WeJYIUsTrT3KZWWCknSopjg==" 
+        crossorigin="anonymous" 
+        referrerpolicy="no-referrer"></script>
+
+        <!-- Validation cdn -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+
     <!-- Bootstrap -->
 
     <link
@@ -71,52 +80,53 @@
                 type="button"
                 id="reset_modal"
               ></button>
-              <form class="p-3 w-100 gap-5">
+              <form class="p-3 w-100 gap-5 add-student-form">
                 <h3 class="text-center">Add Student</h3>
                 <div class="d-flex justify-content-around pt-3">
                   <div class="form-group">
-                    <label class="form-label"
+                    <label class="form-label" for="firstName"
                       >FirstName<span class="text-danger">*</span></label
-                    ><input type="text" class="form-control" id="firstName" />
+                    ><input type="text" class="form-control" id="firstName" name="firstName"/>
                   </div>
                   <div class="form-group">
-                    <label class="form-label">MiddleName</label
-                    ><input type="text" class="form-control" id="middleName" />
+                    <label class="form-label" for="middleName">MiddleName</label
+                    ><input type="text" class="form-control" id="middleName" name="middleName" />
                   </div>
                   <div class="form-group">
-                    <label class="form-label"
+                    <label class="form-label" for="lastName"
                       >LastName<span class="text-danger">*</span></label
-                    ><input type="text" class="form-control" id="lastName" />
+                    ><input type="text" class="form-control" id="lastName" name="lastName" />
                   </div>
                 </div>
                 <div class="d-flex justify-content-around pt-3">
                   <div class="form-group">
-                    <label class="form-label"
+                    <label class="form-label" for="studentClass"
                       >Class<span class="text-danger">*</span></label
                     ><input
                       type="text"
                       class="form-control"
                       id="studentClass"
+                      name="studentClass"
                     />
                   </div>
                   <div class="form-group">
-                    <label class="form-label"
+                    <label class="form-label" for="gender"
                       >Gender<span class="text-danger">*</span></label
-                    ><select name="" class="form-select" id="gender">
+                    ><select name="gender" class="form-select" id="gender">
                       <option value="" selected disabled>Select Gender</option>
                       <option value="M">Male</option>
                       <option value="F">Female</option>
                     </select>
                   </div>
                   <div class="form-group">
-                    <label class="form-label"
+                    <label class="form-label" for="dob"
                       >D.O.B<span class="text-danger">*</span></label
-                    ><input type="text" class="form-control" id="dob" />
+                    ><input type="text" class="form-control" id="dob" name="dob" />
                   </div>
                 </div>
                 <div class="d-flex justify-content-around pt-3">
                   <div class="form-group">
-                    <label class="form-label"
+                    <label class="form-label" for="residingStatus"
                       >Hosteller/Dayscholar<span class="text-danger"
                         >*</span
                       ></label
@@ -124,6 +134,7 @@
                       class="form-select"
                       style="width: 223.2px"
                       id="residingStatus"
+                      name="residingStatus"
                     >
                       <option value="" selected disabled>
                         Residency Status
@@ -133,33 +144,34 @@
                     </select>
                   </div>
                   <div class="form-group">
-                    <label class="form-label"
+                    <label class="form-label" for="phoneNo"
                       >Phone Number<span class="text-danger">*</span></label
-                    ><input type="text" class="form-control" id="phoneNo" />
+                    ><input type="text" class="form-control" id="phoneNo" name="phoneNo" />
                   </div>
                   <div class="form-group">
-                    <label class="form-label"
+                    <label class="form-label" for="studentEmail"
                       >Email<span class="text-danger">*</span></label
                     ><input
                       type="text"
                       class="form-control"
                       id="studentEmail"
+                      name="studentEmail"
                     />
                   </div>
                 </div>
                 <div class="d-flex pt-3 justify-content-around">
                   <div class="form-group">
-                    <label for="" class="form-label"
+                    <label for="activeStatus" class="form-label"
                       >Status<span class="text-danger">*</span></label
                     >
-                    <select class="form-select" id="activeStatus">
+                    <select class="form-select" id="activeStatus" name="activeStatus">
                       <option value="" selected disabled>Select Status</option>
                       <option value="A">Active</option>
                       <option value="I">Inactive</option>
                     </select>
                   </div>
                   <div class="form-group">
-                    <label for="" class="form-label"
+                    <label for="emergencyContactPersonName" class="form-label" 
                       >Emergency Contact Name<span class="text-danger"
                         >*</span
                       ></label
@@ -168,10 +180,11 @@
                       class="form-control"
                       type="text"
                       id="emergencyContactPersonName"
+                      name="emergencyContactPersonName"
                     />
                   </div>
                   <div class="form-group">
-                    <label for="" class="form-label"
+                    <label for="emergencyContactPhoneNumber" class="form-label"
                       >Emergency Contact Number<span class="text-danger"
                         >*</span
                       ></label
@@ -180,33 +193,34 @@
                       class="form-control"
                       type="text"
                       id="emergencyContactPhoneNumber"
+                      name="emergencyContactPhoneNumber"
                     />
                   </div>
                 </div>
                 <div class="d-flex pt-3 justify-content-around">
                   <div class="form-group">
-                    <label for="" class="form-label"
+                    <label for="streetName" class="form-label"
                       >Street<span class="text-danger">*</span></label
                     >
-                    <input type="text" class="form-control" id="streetName" />
+                    <input type="text" class="form-control" id="streetName" name="streetName" />
                   </div>
                   <div class="form-group">
-                    <label for="" class="form-label"
+                    <label for="cityName" class="form-label"
                       >City<span class="text-danger">*</span></label
                     >
-                    <input class="form-control" type="text" id="cityName" />
+                    <input class="form-control" type="text" id="cityName" name="cityName"/>
                   </div>
                   <div class="form-group">
-                    <label for="" class="form-label"
+                    <label for="postalcode" class="form-label"
                       >Postal Code<span class="text-danger">*</span></label
                     >
-                    <input class="form-control" type="text" id="postalcode" />
+                    <input class="form-control" type="text" id="postalcode"name="postalcode" />
                   </div>
                 </div>
                 <div class="d-flex pt-5 justify-content-evenly gap-5">
                   <button
-                    type="button"
-                    id="add_submit"
+                    type="submit"
+                    id="add_submmit"
                     class="btn btn-success w-50"
                   >Add</button
                   ><button

@@ -58,6 +58,9 @@
 #teacher_submit_modal{
     border-radius: 50%;
 }
+.error{
+    color: red;
+}
 #teacher_submit{
     background-color: #E9C46A;
 }

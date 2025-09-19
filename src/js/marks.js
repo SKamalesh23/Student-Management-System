@@ -285,7 +285,7 @@ $(".save-marks").text("Save Marks");
         $("#marks_filter").slideUp();
       });
       $("#table").on("click", ".fa-pen-to-square", function () {
-        $row = $(this).closest("tr").find("td:first-child");
+        $row = $(this).closest("tr").find("td:nth-child(2)");
         const dataId = $row.data("id");
         $("#contentWrapper").toggleClass("slide-form");
         $.ajax({

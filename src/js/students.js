@@ -1,178 +1,57 @@
+const SELECTORS = {
+  header : "#header",
+  phoneNo:"#phoneNo",
+  navBar:".nav-custom",
+  loader:"#loader",
+  activeStatus:"#active",
+  residence:"#resident",
+  table:"#table",
+  searchBy:"#search_by",
+  searchValue:"#search_value"
+}
+
 const custom = '../components/header.html';
-$("#header").load(custom, () => {
+$(SELECTORS.header).load(custom, () => {
   const script = document.createElement("script");
   script.src = "../js/header.js";
   script.onload = () => {
     // Now <header-element> is defined
-    $("#header").append("<header-element></header-element>");
+    $(SELECTORS.header).append("<header-element></header-element>");
   };
   document.body.appendChild(script);
 });
 //nav
-$("#phoneNo").inputmask("999-9999-999")
+$(SELECTORS.phoneNo).inputmask("999-9999-999")
 const nav_path = "../components/nav.html"
-$(".nav-custom").load(nav_path,()=>{
+$(SELECTORS.navBar).load(nav_path,()=>{
   const script = document.createElement("script")
   script.src="../js/nav.js";
   script.onload = () =>{
-    $('.nav-custom').append("<custom-navbar></custom-navbar>")
+    $(SELECTORS.navBar).append("<custom-navbar></custom-navbar>")
   }
   document.body.appendChild(script)
 })
 //loader Element
 const load_path = "../components/loader.html"
-$("#loader").load(load_path,()=>{
+$(SELECTORS.loader).load(load_path,()=>{
   const script = document.createElement("script")
   script.src = "../js/loader.js"
   script.onload = () =>{
-    $("#loader").append("<custom-loader></custom-loader>")
+    $(SELECTORS.loader).append("<custom-loader></custom-loader>")
   }
   document.body.appendChild(script)
 
 })
-function verify(input_arr) {
-  let ver = true;
-
-  const name_reg = /^[A-Z][a-z]{2,25}$/;
-  const last_reg = /^[A-Za-z]{1,24}$/;
-  const class_reg = /^[0-9]$/;
-  const mail_reg = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,}$/;
-  const number_reg = /^[6-9][0-9]{9}$/;
-
-  console.log(input_arr);
-
-  for (let key in input_arr) {
-    console.log(`Key : ${key} , value : ${input_arr[key]}`);
-
-    // remove old error if any
-    $(`#${key}`).next(".err").remove();
-    if (key === "emergencyContactPhoneNumber" && !input_arr[key]) {
-      $(`#${key}`).after(
-        `<span class="text-danger err">Enter Phone Number</span>`
-      );
-    }
-    if (key === "emergencyContactPersonName" && !input_arr[key]) {
-      $(`#${key}`).after(`<span class="text-danger err">Enter Name</span>`);
-    }
-    if (
-      key !== "middleName" &&
-      key !== "emergencyContactPhoneNumber" &&
-      key !== "emergencyContactPersonName" &&
-      (!input_arr[key] || input_arr[key].length === 0)
-    ) {
-      $(`#${key}`).after(`<span class="text-danger err">Enter ${key}</span>`);
-      ver = false;
-    } else {
-      if (
-        key === "firstName" &&
-        input_arr[key] &&
-        !name_reg.test(input_arr[key])
-      ) {
-        ver = false;
-        $(`#${key}`).after(
-          `<span class="text-danger err">Enter Valid First Name</span>`
-        );
-      } else if (
-        key === "middleName" &&
-        input_arr[key] &&
-        !name_reg.test(input_arr[key])
-      ) {
-        ver = false;
-        $(`#${key}`).after(
-          `<span class="text-danger err">Enter Valid Middle Name</span>`
-        );
-      } else if (
-        key === "lastName" &&
-        input_arr[key] &&
-        !last_reg.test(input_arr[key])
-      ) {
-        ver = false;
-        $(`#${key}`).after(
-          `<span class="text-danger err">Enter Valid Last Name</span>`
-        );
-      } else if (
-        key === "studentEmail" &&
-        input_arr[key] &&
-        !mail_reg.test(input_arr[key])
-      ) {
-        ver = false;
-        $(`#${key}`).after(
-          `<span class="text-danger err">Enter Valid Email</span>`
-        );
-      } else if (
-        key === "phoneNo" &&
-        input_arr[key] &&
-        !number_reg.test(input_arr[key])
-      ) {
-        ver = false;
-        $(`#${key}`).after(
-          `<span class="text-danger err">Enter Valid Phone Number</span>`
-        );
-      } else if (
-        key === "emergencyContactPhoneNumber" &&
-        input_arr[key] &&
-        !number_reg.test(input_arr[key])
-      ) {
-        ver = false;
-        $(`#${key}`).after(
-          `<span class="text-danger err">Enter Valid Emergency Number</span>`
-        );
-      }
-    }
-  }
-
-  return ver;
-}
-
-$("#student_submit_modal").on("input change","input,select",function(){
-  console.log($(this).closest(".form-group").find(".err").remove())
-})
-
-// function filteredTable(search_by,search_value,noe,active){
-//     console.log(search_by,search_value,noe,active);
-//     $.ajax({
-//         method:"GET",
-//         url:'../../public/json/teachers.json',
-//         dataType:"json",
-//         // data:JSON.stringify({})
-//         success:function(data){
-//             const table = $("#table").dataTable({
-//         sort:false,
-//         data:data,
-//         column:[
-//             {
-//                 title:"Student ID",
-//                 data:"id"
-//             },
-//             {
-//                 title:'Student Name',
-//                 data:"teacherName",
-//             }
-//             ,{
-//                 title:"Student Email",
-//                 data:"teacherEmail"
-//             }
-//         ]
-
-//     })
-
-//         }
-//     })
-
-// }
-let studentId = 0
-
-$(document).ready(() => {
-  $("#dob").datepicker({
-      dateFormat: "yy-mm-dd",
-  })
+const Students = function(){
+  this.getStudentsList = function(){
+      
   let update_id = 0;
-  const val = $("#active").val();
+  const val = $(SELECTORS.activeStatus).val();
   const isActive = val ? (val === "A" ? true : false) : null;
   let isHosteller = false;
   let isDayscholar = false;
   let count = 0;
-  const res_val = $("#resident").val();
+  const res_val = $(SELECTORS.residence).val();
 
   if (res_val === "H") {
     isHosteller = true;
@@ -180,8 +59,8 @@ $(document).ready(() => {
     isDayscholar = true;
   }
   // if val is empty/undefined → both remain false
-  const searchBy = $("#search_by").val();
-  const searchValue = $("#search_value").val();
+  const searchBy = $(SELECTORS.searchBy).val();
+  const searchValue = $(SELECTORS.searchValue).val();
   let noe = $("#noe").val();
   if (noe) {
     noe = parseInt(noe);
@@ -198,18 +77,7 @@ $(document).ready(() => {
     length: noe,
   };
   console.log(filter);
-
-  //dataTable
-  $.ajax({
-    method: "POST",
-    url: "https://dev-api.humhealth.com/StudentManagementAPI/students/list",
-    data: JSON.stringify(filter),
-    dataType: "json",
-    contentType: "application/json",
-    success: function (data) {
-      console.log(data);
-      count = data.recordsTotal;
-      const table = $("#table").DataTable({
+      const table = $(SELECTORS.table).DataTable({
         sort: false,
         paging: true,
         ajax: {
@@ -252,7 +120,6 @@ $(document).ready(() => {
           },
           dataSrc: "data", // tell DataTables to use response.data,
           error:function(xhr,statusText,error){
-            alert("hiii")
           }
         },
         dom: '<"dt-header d-flex flex-column justify-content-between w-100" <"d-flex justify-content-between px-5 w-100"<"search-factors dt-search d-flex justify-content-between  w-100" >>>rt<"d-flex justify-content-between"<i>p>',
@@ -452,58 +319,6 @@ $(document).ready(() => {
   })
         $("#view_student_modal").modal("show")
       })
-          $("#table").on("click", ".fa-pen-to-square", function () {
-    $(".err").remove();
-
-            update_id = $(this).data("id");
-            $.ajax({
-              method: "GET",
-              url: `https://dev-api.humhealth.com/StudentManagementAPI/students/get?id=${update_id}`,
-              dataType: "json",
-              success: function (response) {
-                const res = response.data;
-                console.log("::::::::", res);
-
-                const fname = res.firstName;
-                $("#firstName").val(fname);
-                const mname = res.middleName;
-                $("#middleName").val(mname);
-                const lname = res.lastName;
-                $("#lastName").val(lname);
-                const city = res.cityName;
-                $("#cityName").val(city);
-                const phoneNo = res.phoneNo;
-                $("#phoneNo").val(phoneNo);
-                const streetName = res.streetName;
-                $("#streetName").val(streetName);
-                const post = res.postalcode;
-                $("#postalcode").val(post);
-                const gender = res.gender;
-                $("#gender").val(gender);
-                const ar_date = res.dob.split("-");
-                // console.log(a);
-                // console.log(`${ar_date[2]}-${ar_date[0]}-${ar_date[1]}`)
-                $("#dob").val(`${ar_date[2]}-${ar_date[0]}-${ar_date[1]}`);
-                const emergencyContactPersonName =
-                  res.emergencyContactPersonName;
-                $("#emergencyContactPersonName").val(
-                  emergencyContactPersonName
-                );
-                const emergencyContactPhoneNumber =
-                  res.emergencyContactPhoneNumber;
-                $("#emergencyContactPhoneNumber").val(
-                  emergencyContactPhoneNumber
-                );
-                $("#studentEmail").val(res.studentEmail);
-                $("#studentClass").val(res.studentClass);
-                $("#residingStatus").val(res.residingStatus);
-                $("")
-              },
-            });
-            $("#add_submit").text("Update");
-            $("#student_submit_modal").modal("show");
-
-          });
           $("#table").on("click", ".active-student", function () {
             // alert("clicked")
             const id = $(this).data("id");
@@ -542,156 +357,7 @@ $(document).ready(() => {
           });
         },
       });
-    },
-    error: function (xhr) {
-      console.error("Error", xhr);
-    },
-  });
-
-  $("#add_student").click(() => {
-    // alert("kkk")
-    $(".err").remove();
-
-    $("#add_submit").text("Add")
-    $("#student_submit_modal").modal("show");
-  });
-  $("#add_cancel").click(() => {
-    $(".err").remove()
-    $("#student_submit_modal").modal("hide");
-  });
-  $("#add_submit").click(() => {
-    $(".err").remove();
-    function formatDateToDDMMYYYY(dateStr) {
-      if (!dateStr) return "";
-      const parts = dateStr.split("-"); // ["yyyy", "MM", "dd"]
-      if (parts.length !== 3) return dateStr;
-      return `${parts[1]}-${parts[2]}-${parts[0]}`;
-    }
-    const rawDob = $("#dob").val(); 
-    const dob = formatDateToDDMMYYYY(rawDob); 
- 
-    const details = {
-      firstName: $("#firstName").val(),
-      middleName: $("#middleName").val(),
-      lastName: $("#lastName").val(),
-      gender: $("#gender").val(),
-      dob: formatDateToDDMMYYYY($("#dob").val()), // "23-01-2001"
-      studentClass: parseInt($("#studentClass").val(), 10),
-      residingStatus: $("#residingStatus").val(),
-      phoneNo: $("#phoneNo").val().replace(/\D/g,""),
-      emergencyContactPersonName: $("#emergencyContactPersonName").val(),
-      emergencyContactPhoneNumber: $("#emergencyContactPhoneNumber").val(),
-      streetName: $("#streetName").val(),
-      cityName: $("#cityName").val(),
-      postalcode: $("#postalcode").val(),
-      activeStatus: $("#activeStatus").val(),
-      studentEmail: $("#studentEmail").val(),
-      createdTeacherId: 7,
-    };
-
-    //verify
-    let valid = verify(details);
-    console.log("is valid ---->", valid);
-
-    if (valid) {
-      const api = JSON.stringify(details);
-      console.log(api);
-
-      $(".err").remove();
-      if ($("#add_submit").text().trim() === "Add") {
-
-        console.log("In adddddd");
-        
-        $.ajax({
-          method: "POST",
-          url: "https://dev-api.humhealth.com/StudentManagementAPI/students/save",
-          data: JSON.stringify(details),
-          contentType: "application/json",
-          dataType: "json",
-          success: function (response) {
-            console.log("success ---->", response);
-
-            // const response = JSON.parse(res)
-            if (response.status === "success") {
-              $("#student_submit_modal").modal("hide");
-              // $("#student_success").modal("show");
-              // setTimeout(() => {
-              //   $("#student_success").modal("hide");
-              // }, 2000);
-              Swal.fire({
-                icon: "success",
-                title: "Generated",
-                text: "✅ " + response.data,
-                showConfirmButton: false,
-                timer: 2000,
-              });
-            } else {
-              $("#studentEmail").after(
-                '<span class="text-danger err">Email already Exists</span>'
-              );
-            }
-          },
-          error: function (err) {
-            console.log("Error status : ", err);
-            
-          },
-        });
-      } else {
-        console.log("In updateeeeeeeeeeeee");
-        
-        const update_details = {
-          id: update_id,
-          ...details,
-          updatedTeacherId: 12,
-        };
-        $.ajax({
-          method: "POST",
-          url: "https://dev-api.humhealth.com/StudentManagementAPI/students/save",
-          data: JSON.stringify(update_details),
-          contentType: "application/json",
-          dataType: "json",
-          success: function (response) {
-            console.log("success ---->", response);
-            Swal.fire({
-              icon: "success",
-              title: "Generated",
-              text: "✅ " + response.data,
-              showConfirmButton: false,
-              timer: 2000,
-            });
-            // const response = JSON.parse(res)
-            if (response.status === "success") {
-              $("#student_submit_modal").modal("hide");
-              // $("#student_success").modal("show");
-              // setTimeout(() => {
-              //   $("#student_success").modal("hide");
-              // }, 2000);
-            } else {
-              $("#studentEmail").after(
-                '<span class="text-danger err">Email already Exists</span>'
-              );
-            }
-
-          },
-          error: function (xhr, status, error) {
-            console.log("Error status:", error);
-
-            Swal.fire({
-              icon: "error",
-              title: "Request Failed",
-              text:
-                "❌ " +
-                (xhr.responseJSON?.message || error || "Something went wrong"),
-              showConfirmButton: false,
-              timer: 2500,
-            });
-          },
-        });
-      }
-    }
-  });
-});
-$(".exam-score").click(() => {
+      $(".exam-score").click(() => {
   $(".score-panel").slideToggle(500, () => {
     // After slideToggle animation is finished
     $(".modal-body").animate(
@@ -701,8 +367,6 @@ $(".exam-score").click(() => {
 });
 
 
-function apiCall() {}
-function check() {}
 $("#ok").on("click", function () {
   const $btn = $(this);
   $btn.prop("disabled", true).html(`
@@ -730,3 +394,271 @@ $(document).on("click","#reset_modal",function(){
   const form = $("#student_submit_modal form")[0]; 
   form.reset(); // resets all fields
 })
+  }
+  this.addAndUpdateFunction = function(){
+        $(document).on("click","#add_student,.fa-pen-to-square",function(){
+    if($(this).is("#add_student")){
+          $("#add_submmit").text("Add")
+
+    }
+
+    update_id=0
+      $("#dob").datepicker({
+      dateFormat: "mm-dd-yy",
+  })
+    // alert("kkk")
+    $(" label.error").remove();
+    // console.log("iii>",$(this))
+    if($(this).is(".fa-pen-to-square")){
+                  $("#add_submmit").text("Update");
+
+      console.log("yes it is")
+      update_id = $(this).data("id");
+            $.ajax({
+              method: "GET",
+              url: `https://dev-api.humhealth.com/StudentManagementAPI/students/get?id=${update_id}`,
+              dataType: "json",
+              success: function (response) {
+                const res = response.data;
+                console.log("::::::::", res);
+
+                const fname = res.firstName;
+                $("#firstName").val(fname);
+                const mname = res.middleName;
+                $("#middleName").val(mname);
+                const lname = res.lastName;
+                $("#lastName").val(lname);
+                const city = res.cityName;
+                $("#cityName").val(city);
+                const phoneNo = res.phoneNo;
+                $("#phoneNo").val(phoneNo);
+                const streetName = res.streetName;
+                $("#streetName").val(streetName);
+                const post = res.postalcode;
+                $("#postalcode").val(post);
+                const gender = res.gender;
+                $("#gender").val(gender);
+                
+                // console.log(a);
+                // console.log(`${ar_date[2]}-${ar_date[0]}-${ar_date[1]}`)
+                $("#dob").val(res.dob);
+                const emergencyContactPersonName =
+                  res.emergencyContactPersonName;
+                $("#emergencyContactPersonName").val(
+                  emergencyContactPersonName
+                );
+                const emergencyContactPhoneNumber =
+                  res.emergencyContactPhoneNumber;
+                $("#emergencyContactPhoneNumber").val(
+                  emergencyContactPhoneNumber
+                );
+                $("#studentEmail").val(res.studentEmail);
+                $("#studentClass").val(res.studentClass);
+                $("#residingStatus").val(res.residingStatus);
+                $("")
+              },
+            });
+    }
+
+    $("#student_submit_modal").modal("show");
+    $.validator.addMethod(
+        "regex",
+        function (value, element, regexp) {
+          let re = new RegExp(regexp);
+          return this.optional(element) || re.test(value);
+        },
+        "Invalid format"
+      );
+    $(".add-student-form").validate({
+      onkeyup:false,
+      rules:{
+        firstName:{
+          required:true,
+          regex:/^[A-Z][a-z]{2,25}$/
+
+        },
+        lastName:{
+          required:true,
+          regex:/^[A-Z][a-z]{2,25}$/
+
+        },
+        middleName:{
+          required:false,
+          regex:/^[A-Z][a-z]{2,25}$/
+        },
+        studentClass:{
+          required:true,
+          regex:/^[0-9]$/
+        },
+        gender:{
+          required:true,
+        },
+        dob:{
+          required:true,
+        },
+        activeStatus:{
+          required:true,
+        },
+        studentEmail:{
+          required:true,
+          regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,}$/
+        },
+        residingStatus:{
+          required:true,
+        },
+        emergencyContactPersonName:{
+          required:true,
+
+        },
+        emergencyContactPhoneNumber:{
+          required:true,
+        },
+        phoneNo:{
+          required:true,
+
+        },
+        streetName:{
+          required:true,
+        },
+        cityName:{
+          required:true,
+        },
+        postalcode:{
+          required:true,
+        }
+      },
+      messages:{
+         firstName:{
+          required:"Enter FirstName",
+          regex:"Not valid Name"
+
+        },
+        lastName:{
+          required:"Enter Lastname",
+          regex:"Not Valid Name"
+
+        },
+        middleName:{
+          // required:true
+          regex:"Not a valid name"
+        },
+        studentClass:{
+          required:"Enter Class",
+          regex:"Not a Valid Class"
+        },
+        gender:{
+          required:"Enter Gender",
+        },
+        dob:{
+          required:"Enter Date of Birth"
+        },
+        activeStatus:{
+          required:"Select active status"
+        },
+        studentEmail:{
+          required:"Enter mail",
+          regex:"Not a Valid Email"
+        },
+        residingStatus:{
+          required:"Select residence"
+        },
+        emergencyContactPersonName:{
+          required:"Enter name"
+        },
+        emergencyContactPhoneNumber:{
+          required:"Enter number"
+        },
+        phoneNo:{
+          required:"Enter mobile number",
+
+        },
+        streetName:{
+          required:"Enter Street"
+        },
+        cityName:{
+          required:"Enter City"
+        },
+        postalcode:{
+          required:"Enter Postal code"
+        }
+      },
+      submitHandler:function(form,event){
+        event.preventDefault()
+          const data = $(form).serializeJSON()
+          console.log(data);
+          data.phoneNo = data.phoneNo.replace(/-/g, "");
+          let request = {...data,createdTeacherId:12}
+          console.log("update id : ",update_id);
+          // return false;
+          if(update_id>0){
+            request = {id:update_id,...request,updatedTeacherId:7}
+          }
+          console.log(JSON.stringify(request));
+
+          $.ajax({
+          method: "POST",
+          url: "https://dev-api.humhealth.com/StudentManagementAPI/students/save",
+          data: JSON.stringify(request),
+          contentType: "application/json",
+          dataType: "json",
+          success: function (response) {
+            console.log("success ---->", response);
+            Swal.fire({
+              icon: "success",
+              title: "Generated",
+              text: "✅ " + response.data,
+              showConfirmButton: false,
+              timer: 2000,
+            });
+            // const response = JSON.parse(res)
+            if (response.status === "success") {
+              $("#student_submit_modal").modal("hide");
+              $("#student_success").modal("show");
+              setTimeout(() => {
+                $("#student_success").modal("hide");
+              }, 2000);
+            } else {
+              $("#studentEmail").after(
+                '<span class="text-danger err">Email already Exists</span>'
+              );
+            }
+            update_id=0
+
+          },
+          error: function (xhr, status, error) {
+            console.log("Error status:", error);
+
+            Swal.fire({
+              icon: "error",
+              title: "Request Failed",
+              text:
+                "❌ " +
+                (xhr.responseJSON?.message || error || "Something went wrong"),
+              showConfirmButton: false,
+              timer: 2500,
+            });
+          },
+        });
+          
+      }
+    })
+  });
+   $("#add_cancel").click(() => {
+    $("#student_submit_modal").modal("hide");
+  });
+// $("add_student")
+  }
+}
+
+
+let studentId = 0
+
+$(document).ready(() => {
+ 
+ 
+ 
+});
+
+const student = new Students()
+student.getStudentsList()
+student.addAndUpdateFunction()
